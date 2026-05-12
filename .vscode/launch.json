@@ -29,6 +29,16 @@
             "projectName": "pagos",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PedidoApplication<pedido>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.lartduniss.pedido.PedidoApplication",
+            "projectName": "pedido",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
