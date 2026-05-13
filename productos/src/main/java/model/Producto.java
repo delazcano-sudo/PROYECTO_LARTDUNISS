@@ -5,7 +5,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-// Importaciones de validación (Indispensables para la rúbrica IE 2.2.2)
+// Importaciones de validación nuevas ya que no las considere antes 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
