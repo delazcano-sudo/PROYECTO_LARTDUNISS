@@ -1,0 +1,20 @@
+
+#Sirve para evitar problemas de compatibilidad entre MAC y windowsS
+# Archivos de sistema (Mac y Windows)
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+
+# Archivos de Java/Maven
+target/
+*.class
+*.jar
+*.war
+
+# Configuraciones de VS Code
+.vscode/
+.settings/
+.classpath
+.project

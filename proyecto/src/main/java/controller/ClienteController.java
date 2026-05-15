@@ -2,13 +2,15 @@ package controller;
 
 import model.Cliente;
 import service.ClienteService;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -20,17 +22,21 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> listar() {
-        return clienteService.obtenerTodos();
+    public ResponseEntity<List<Cliente>> listar() {
+        List<Cliente> clientes = clienteService.obtenerTodos();
+        return new ResponseEntity<>(clientes, HttpStatus.OK);
     }
 
     @PostMapping
-    public Cliente crear(@Valid @RequestBody Cliente cliente) {
-        return clienteService.guardarCliente(cliente);
+    public ResponseEntity<Cliente> crear(@Valid @RequestBody Cliente cliente) {
+        Cliente nuevo = clienteService.guardarCliente(cliente);
+        return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public Cliente obtenerUno(@PathVariable Long id) {
-        return clienteService.buscarPorId(id).orElse(null);
+    public ResponseEntity<Cliente> obtenerUno(@PathVariable Long id) {
+        return clienteService.buscarPorId(id)
+                .map(c -> new ResponseEntity<>(c, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
