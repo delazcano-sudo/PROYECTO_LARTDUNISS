@@ -19,11 +19,11 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre es obligatorio") // Valida que no sea nulo ni vacío
+    @NotBlank(message = "El nombre es obligatorio") 
     private String nombre;
 
     @NotNull(message = "El precio no puede ser nulo")
-    @Min(value = 0, message = "El precio debe ser mayor o igual a 0") // Regla de negocio
+    @Min(value = 0, message = "El precio debe ser mayor o igual a 0") 
     private Double precio;
 
     @NotNull(message = "El stock no puede ser nulo")
