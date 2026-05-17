@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 
@@ -20,8 +22,13 @@ public class Pedido
     private Long id;
 
     //La id del cliente
+    @NotBlank(message = "El id del cliente no puede estar vacio")
     private Long clienteId;
+
     private LocalDate fechaCreacion;
+
+    @NotBlank(message = "El monto total es obligatorio")
+    @Positive(message = "El monto total debe ser un valor positivo")
     private Double montoTotal;
 
     private String estadoPedido;

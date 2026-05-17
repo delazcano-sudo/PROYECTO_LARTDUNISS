@@ -2,6 +2,7 @@ package com.lartduniss.pedido.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,18 @@ public class PedidoService
         return pedidoRepository.findAll();
     }
 
+    public Optional<Pedido> buscarPorId(Long id)
+    {
+        return pedidoRepository.findById(id);
+    }
+
     public Pedido crear(Pedido pedido)
     {
         pedido.setFechaCreacion(LocalDate.now());
         pedido.setEstadoPedido("PENDIENTE_PAGO");
         return pedidoRepository.save(pedido);
     }
+
 
     public Pedido actualizarEstado(Long id, String nuevoEstado) 
     {

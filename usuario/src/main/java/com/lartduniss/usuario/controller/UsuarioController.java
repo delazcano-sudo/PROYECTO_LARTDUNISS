@@ -3,6 +3,7 @@ package com.lartduniss.usuario.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lartduniss.usuario.model.Usuario;
 import com.lartduniss.usuario.service.UsuarioService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -35,10 +38,10 @@ public class UsuarioController
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> registrar(@RequestBody Usuario usuario)
+    public ResponseEntity<Usuario> registrar(@Valid @RequestBody Usuario usuario)
     {
         Usuario nuevoUsuario = usuarioService.guardar(usuario);
-        return ResponseEntity.ok(nuevoUsuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
     }
 
     @DeleteMapping("/{id}")

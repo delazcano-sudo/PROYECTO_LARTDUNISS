@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lartduniss.pagos.model.Pago;
 import com.lartduniss.pagos.service.PagoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pagos")
@@ -37,9 +40,10 @@ public class PagoController
     }
 
     @PostMapping
-    public ResponseEntity<Pago> crear(@RequestBody Pago pago)
+    public ResponseEntity<Pago> crear(@Valid @RequestBody Pago pago)
     {
-        return ResponseEntity.ok(pagoService.guardar(pago));
+        Pago nuevoPago = pagoService.guardar(pago);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPago);
     }
 
     @DeleteMapping("/{id}")

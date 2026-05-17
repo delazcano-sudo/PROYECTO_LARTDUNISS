@@ -3,6 +3,7 @@ package com.lartduniss.pedido.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lartduniss.pedido.model.Pedido;
 import com.lartduniss.pedido.service.PedidoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -30,9 +33,18 @@ public class PedidoController
 
     @PostMapping
     //Al crear un pedido el service le pondra "Pendiente_Pago" de forma automatica
-    public ResponseEntity<Pedido> crear(@RequestBody Pedido pedido)
+    public ResponseEntity<Pedido> crear(@Valid @RequestBody Pedido pedido)
     {
-        return ResponseEntity.ok(pedidoService.crear(pedido));
+        Pedido nuevoPedido = pedidoService.crear(pedido);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPedido);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pedido> obtenerPorId(@PathVariable Long id) 
+    {
+        return pedidoService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}/estado")
