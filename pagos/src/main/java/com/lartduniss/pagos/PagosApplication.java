@@ -3,7 +3,9 @@ package com.lartduniss.pagos;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"com.lartduniss.pagos.model"})
@@ -12,6 +14,11 @@ public class PagosApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PagosApplication.class, args);
+    }
+// le faltaba el bean para que corra sin error 
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }

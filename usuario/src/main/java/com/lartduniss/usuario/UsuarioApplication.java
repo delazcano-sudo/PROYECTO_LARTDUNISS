@@ -3,7 +3,9 @@ package com.lartduniss.usuario;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"com.lartduniss.usuario.model"})
@@ -12,6 +14,11 @@ public class UsuarioApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(UsuarioApplication.class, args);
+    }
+// Igualmente añadimos el bean para que corra sin arrojar errores
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 }
