@@ -10,7 +10,7 @@ import model.Despacho;
 import service.DespachoService;
 
 @RestController
-@RequestMapping("/api/despachos") 
+@RequestMapping("/api/v1/despachos") 
 public class DespachoController {
 
     @Autowired

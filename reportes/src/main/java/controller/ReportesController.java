@@ -10,7 +10,7 @@ import model.Reportes;
 import service.ReportesService;
 
 @RestController
-@RequestMapping("/api/reportes")
+@RequestMapping("/api/v1/reportes")
 public class ReportesController {
 
     @Autowired

@@ -10,7 +10,7 @@ import model.Notificacion;
 import service.NotificacionService;
 
 @RestController
-@RequestMapping("/api/notificaciones") // Con esta ruta mas el puerto nos metemos en postman <3
+@RequestMapping("/api/v1/notificaciones") // Con esta ruta mas el puerto nos metemos en postman <3
 public class NotificacionController {
 
     @Autowired
