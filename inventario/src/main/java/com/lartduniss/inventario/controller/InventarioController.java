@@ -9,19 +9,30 @@ import com.lartduniss.inventario.model.Inventario;
 import com.lartduniss.inventario.service.InventarioService;
 import jakarta.validation.Valid;
 
+// ANOTACIONES SWAGGER
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/inventario")
-public class InventarioController 
-{
+@Tag(name = "Controlador de Inventario", description = "Endpoints para la gestión, control de stock y alertas de productos")
+public class InventarioController {
+
     @Autowired
     private InventarioService inventarioService;
 
     @GetMapping
+    @Operation(summary = "Listar todo el inventario", description = "Retorna una lista completa de las existencias de todos los productos registrados")
+    @ApiResponse(responseCode = "200", description = "Lista de inventario obtenida con éxito")
     public List<Inventario> listar() {
         return inventarioService.listarTodo();
     }
 
     @GetMapping("/producto/{productoId}")
+    @Operation(summary = "Obtener inventario por ID de Producto", description = "Busca el registro de stock asociado a un producto específico")
+    @ApiResponse(responseCode = "200", description = "Registro de inventario encontrado")
+    @ApiResponse(responseCode = "404", description = "Producto no registrado en el inventario")
     public ResponseEntity<Inventario> obtenerPorProducto(@PathVariable Long productoId) {
         return inventarioService.buscarPorProducto(productoId)
                 .map(ResponseEntity::ok)
@@ -29,13 +40,18 @@ public class InventarioController
     }
 
     @PostMapping
+    @Operation(summary = "Registrar stock inicial", description = "Crea un nuevo registro de inventario y establece alertas de stock mínimo")
+    @ApiResponse(responseCode = "201", description = "Inventario registrado exitosamente")
+    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos o negativos")
     public ResponseEntity<Inventario> registrar(@Valid @RequestBody Inventario inventario) {
         Inventario nuevo = inventarioService.guardar(inventario);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
 
-    // Endpoint clave para que lo usen otros módulos
     @PutMapping("/producto/{productoId}/descontar")
+    @Operation(summary = "Descontar stock disponible", description = "Disminuye la cantidad de unidades en base a una venta o pedido")
+    @ApiResponse(responseCode = "200", description = "Stock descontado correctamente")
+    @ApiResponse(responseCode = "400", description = "Stock insuficiente o producto no registrado")
     public ResponseEntity<String> descontar(@PathVariable Long productoId, @RequestParam Integer cantidad) {
         boolean exito = inventarioService.descontarStock(productoId, cantidad);
         if (exito) {
