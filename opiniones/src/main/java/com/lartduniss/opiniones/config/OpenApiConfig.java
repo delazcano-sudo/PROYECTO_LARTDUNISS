@@ -1,5 +1,4 @@
-package com.lartduniss.pedido.config;
-
+package com.lartduniss.opiniones.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -16,12 +15,12 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("L'art du niss - Microservicio de Pedidos")
+                        .title("L'art du niss - Microservicio de Opiniones")
                         .version("1.0")
-                        .description("Documentación centralizada del Sistema de Pedidos y Ventas"))
+                        .description("Documentación centralizada del Sistema de Calificaciones y Reseñas"))
                 // --- Redirección obligatoria a través del API Gateway ---
                 .servers(List.of(
-                        new Server().url("http://localhost:8093").description("API Gateway")
+                        new Server().url("http://localhost:8098").description("API Gateway")
                 ));
     }
 }
