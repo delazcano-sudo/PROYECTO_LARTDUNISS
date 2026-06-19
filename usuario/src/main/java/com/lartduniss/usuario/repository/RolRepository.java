@@ -5,11 +5,11 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.lartduniss.usuario.model.Usuario;
+import com.lartduniss.usuario.model.Rol;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository <Usuario, Long> 
+public interface RolRepository extends JpaRepository<Rol, Long>
 {
-    Optional<Usuario>findByNombreUsuario(String nombreUsuario);
-
+    Optional<Rol> findByNombreRol(String nombreRol);
 }
+

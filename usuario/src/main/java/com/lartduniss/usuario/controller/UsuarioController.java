@@ -1,54 +1,47 @@
 package com.lartduniss.usuario.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lartduniss.usuario.model.Usuario;
+import com.lartduniss.usuario.dto.UsuarioRequest;
 import com.lartduniss.usuario.service.UsuarioService;
 
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController 
+@RequestMapping("/usuario")
+@Tag(name = "Autentication", description = "Endpoits para registro y logi de usuarios")
+public class UsuarioController
 {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping
-    public List<Usuario> listar()
+    @Operation(summary = "Registrar un nuevo usuario", description = "Guarda el usuario mapeando sus roles desde el DTO")
+    @PostMapping("/registrar")
+    // CAMBIO CLAVE: Usamos AuthRequest en lugar de la Entidad Usuario
+    public ResponseEntity<String> registrar(@RequestBody UsuarioRequest request)
     {
-        return usuarioService.listarTodos();
+        // Le pasamos el objeto request (DTO) al service
+        return ResponseEntity.ok(usuarioService.registrar(request));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> obtener(@PathVariable Long id)
+    @Operation(summary = "Iniciar sesión", description = "Retorna el Token JWT si las credenciales son válidas")
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UsuarioRequest request)
     {
-        return usuarioService.buscarPorId(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        try {
+            String token = usuarioService.login(request.getNombreUsuario(), request.getClave());
+            return ResponseEntity.ok(token);
+        }
+        catch(RuntimeException e)
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
-
-    @PostMapping
-    public ResponseEntity<Usuario> registrar(@Valid @RequestBody Usuario usuario)
-    {
-        Usuario nuevoUsuario = usuarioService.guardar(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoUsuario);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id)
-    {
-        usuarioService.eliminar(id);
-        return ResponseEntity.noContent().build();
-    }
-
 }

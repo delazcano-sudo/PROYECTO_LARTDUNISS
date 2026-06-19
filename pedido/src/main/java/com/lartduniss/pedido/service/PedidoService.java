@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.lang.NonNull; 
+import jakarta.transaction.Transactional; 
 
 import com.lartduniss.pedido.model.Pedido;
 import com.lartduniss.pedido.repository.PedidoRepository;
@@ -21,11 +23,13 @@ public class PedidoService
         return pedidoRepository.findAll();
     }
 
-    public Optional<Pedido> buscarPorId(Long id)
+    // Agregamos @NonNull como en el buscarPorId de la profe
+    public Optional<Pedido> buscarPorId(@NonNull Long id)
     {
         return pedidoRepository.findById(id);
     }
 
+    @Transactional // Buena práctica para operaciones de guardado
     public Pedido crear(Pedido pedido)
     {
         pedido.setFechaCreacion(LocalDate.now());
@@ -33,16 +37,14 @@ public class PedidoService
         return pedidoRepository.save(pedido);
     }
 
-
-    public Pedido actualizarEstado(Long id, String nuevoEstado) 
+    @Transactional
+    public Pedido actualizarEstado(@NonNull Long id, String nuevoEstado) 
     {
-        Pedido pedido = pedidoRepository.findById(id).orElse(null);
-        if (pedido != null)
-            {
-                pedido.setEstadoPedido(nuevoEstado);
-                return pedidoRepository.save(pedido);
-            }
-        return null;
+        // En vez de orElse(null), usamos orElseThrow para encajar con la gestión de errores global
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con el ID: " + id));
+        
+        pedido.setEstadoPedido(nuevoEstado);
+        return pedidoRepository.save(pedido);
     }
-
 }
