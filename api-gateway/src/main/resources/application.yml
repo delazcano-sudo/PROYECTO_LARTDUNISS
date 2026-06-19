@@ -1,28 +1,102 @@
 server:
-  port: 8080
+  port: 8080 
+
+jwt:
+  secret: "493322258340235739058340598340598340598340598340598"
+
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
       routes:
+        # Libre para Login/Registro
+        - id: usuarios-auth-service
+          uri: http://localhost:8095
+          predicates:
+            - Path=/auth/**
+
+        # Microservicio de clientes
         - id: clientes-service
           uri: http://localhost:8091
           predicates:
-            - Path=/clientes/**
+            - Path=/api/v1/clientes/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de productos
         - id: productos-service
           uri: http://localhost:8092
           predicates:
-            - Path=/productos/**
-        - id: pagos-service
+            - Path=/api/v1/productos/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de pedidos
+        - id: pedidos-service
           uri: http://localhost:8093
           predicates:
-            - Path=/pagos/**
-        - id: pedidos-service
+            - Path=/api/v1/pedidos/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de pagos
+        - id: pagos-service
           uri: http://localhost:8094
           predicates:
-            - Path=/pedidos/**
-        - id: usuarios-service
-          uri: http://localhost:8095
+            - Path=/api/v1/pagos/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de notificaciones
+        - id: notificaciones-service
+          uri: http://localhost:8071
           predicates:
-            - Path=/usuarios/**
+            - Path=/api/v1/notificaciones/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de reportes
+        - id: reportes-service
+          uri: http://localhost:8096
+          predicates:
+            - Path=/api/v1/reportes/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de despacho
+        - id: despacho-service
+          uri: http://localhost:8097
+          predicates:
+            - Path=/api/v1/despacho/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de opiniones
+        - id: opiniones-service
+          uri: http://localhost:8098
+          predicates:
+            - Path=/api/v1/opiniones/**
+          filters:
+            - AuthenticationFilter
+
+        # Microservicio de inventario
+        - id: inventario-service
+          uri: http://localhost:8099
+          predicates:
+            - Path=/api/v1/inventario/**
+          filters:
+            - AuthenticationFilter
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.http.server.reactive: DEBUG
