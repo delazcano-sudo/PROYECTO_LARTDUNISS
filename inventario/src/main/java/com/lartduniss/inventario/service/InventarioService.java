@@ -2,11 +2,14 @@ package com.lartduniss.inventario.service;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.lang.NonNull; 
+import jakarta.transaction.Transactional;
+
 import com.lartduniss.inventario.model.Inventario;
 import com.lartduniss.inventario.repository.InventarioRepository;
-import jakarta.transaction.Transactional;
 
 @Service
 public class InventarioService 
@@ -18,16 +21,22 @@ public class InventarioService
         return inventarioRepository.findAll();
     }
 
-    public Optional<Inventario> buscarPorProducto(Long productoId) {
+    // Método individual por ID único exigido para el mapeo hipermedia HATEOAS
+    public Optional<Inventario> buscarPorId(@NonNull Long id) {
+        return inventarioRepository.findById(id);
+    }
+
+    public Optional<Inventario> buscarPorProducto(@NonNull Long productoId) {
         return inventarioRepository.findByProductoId(productoId);
     }
 
+    @Transactional // Asegura la atomicidad de la inserción o actualización directa
     public Inventario guardar(Inventario nuevoInventario) {
         return inventarioRepository.save(nuevoInventario);
     }
 
-    @Transactional
-    public boolean descontarStock(Long productoId, Integer cantidadDescontar) 
+    @Transactional 
+    public boolean descontarStock(@NonNull Long productoId, @NonNull Integer cantidadDescontar) 
     {
         Optional<Inventario> optInventario = inventarioRepository.findByProductoId(productoId);
         
@@ -41,8 +50,9 @@ public class InventarioService
                 
                 inventarioRepository.save(inventario);
                 
+                // Alerta de stock crítico por consola
                 if (nuevoStock <= inventario.getStockMinimoAlerta()) {
-                    System.out.println("No hay stock disponible de:" + productoId + "Queda unicamente; " + nuevoStock);
+                    System.out.println("ALERTA CRÍTICA: Stock bajo para el producto ID " + productoId + ". Quedan únicamente: " + nuevoStock + " unidades.");
                 }
                 
                 return true; // Descuento exitoso
