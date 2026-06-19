@@ -1,28 +1,92 @@
 server:
   port: 8080
+
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
       routes:
+        # 1. Clientes
         - id: clientes-service
           uri: http://localhost:8091
           predicates:
-            - Path=/clientes/**
+            - Path=/clientes
+
+        # 2. Productos
         - id: productos-service
           uri: http://localhost:8092
           predicates:
-            - Path=/productos/**
+            - Path=/productos
+
+        # 3. Pagos
         - id: pagos-service
           uri: http://localhost:8093
           predicates:
-            - Path=/pagos/**
+            - Path=/pagos
+
+        # 4. Pedidos
         - id: pedidos-service
           uri: http://localhost:8094
           predicates:
-            - Path=/pedidos/**
+            - Path=/pedidos
+
+        # 5. Usuarios
         - id: usuarios-service
           uri: http://localhost:8095
           predicates:
-            - Path=/usuarios/**
+            - Path=/usuarios
+
+        # 6. Despachos 
+        - id: servicio-despachos
+          uri: http://localhost:8097
+          predicates:
+            - Path=/api/despachos
+
+        # 7. Inventario 
+        - id: servicio-inventario
+          uri: http://localhost:8099
+          predicates:
+            - Path=/api/inventario
+
+        # 8. Notificaciones 
+        - id: servicio-notificaciones
+          uri: http://localhost:8071
+          predicates:
+            - Path=/api/notificaciones
+
+        # 9. Reportes 
+        - id: servicio-reportes
+          uri: http://localhost:8096
+          predicates:
+            - Path=/api/reportes
+
+        # 10. Opiniones
+        - id: servicio-opiniones
+          uri: http://localhost:8098
+          predicates:
+            - Path=/api/opiniones
+
+# Configuración exacta de Swagger UI para cada microservicio
+  swagger-ui:
+    urls:
+      - name: Clientes
+        url: /clientes/v3/api-docs
+      - name: Productos
+        url: /productos/v3/api-docs
+      - name: Pagos
+        url: /pagos/v3/api-docs
+      - name: Pedidos
+        url: /pedidos/v3/api-docs
+      - name: Usuarios
+        url: /usuarios/v3/api-docs
+      - name: Despachos
+        url: /api/despachos/v3/api-docs
+      - name: Inventario
+        url: /api/inventario/v3/api-docs
+      - name: Notificaciones
+        url: /api/notificaciones/v3/api-docs
+      - name: Reportes
+        url: /api/reportes/v3/api-docs
+      - name: Opiniones
+        url: /api/opiniones/v3/api-docs
