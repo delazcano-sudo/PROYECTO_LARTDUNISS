@@ -8,16 +8,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-    "lartduniss.proyecto", 
-    "controller", 
+    "lartduniss.proyecto.reportes",
+    "controller",
     "service",
-    "lartduniss.proyecto.controller",
-    "lartduniss.proyecto.service"
+    "lartduniss.proyecto.reportes.config"
 })
-@EntityScan(basePackages = {"model", "lartduniss.proyecto.model"})
-@EnableJpaRepositories(basePackages = {"repository", "lartduniss.proyecto.repository"})
+@EntityScan(basePackages = {"model"})
+@EnableJpaRepositories(basePackages = {"repository"})
 public class ReportesApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ReportesApplication.class, args);
     }
