@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.lartduniss.pedido.config.ErrorResponse;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler 
-{
-    // 1. Captura cuando un CLIENTE intenta modificar estados o alterar pedidos ajenos
+public class GlobalExceptionHandler {
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -24,7 +23,6 @@ public class GlobalExceptionHandler
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 
-    // 2. Manejar cuando el Service lanza una excepción por un ID que no existe (404)
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -35,11 +33,9 @@ public class GlobalExceptionHandler
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    // 3. Manejar fallas en las validaciones de campos (@NotNull, @Positive, etc.)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new HashMap<>();
-        
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             errores.put(error.getField(), error.getDefaultMessage());
         });
