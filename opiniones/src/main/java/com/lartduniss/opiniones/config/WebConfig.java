@@ -8,7 +8,7 @@ import org.springframework.lang.NonNull;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Override
-    public void addCorsMappings(@NonNull CorsRegistry registry) { // Agrega @NonNull aquí
+    public void addCorsMappings(@NonNull CorsRegistry registry) { 
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

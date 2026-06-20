@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate; // ¡IMPORTANTE: Agrega esta importación!
+import org.springframework.web.client.RestTemplate; 
 
 import com.lartduniss.pagos.model.Pago;
 import com.lartduniss.pagos.repository.PagoRepository;
@@ -28,7 +28,6 @@ public class PagoService
         return pagoRepository.findAll();
     }
 
-    // Le sumamos el @NonNull como la profe
     public Optional<Pago> buscarPorId(@NonNull Long id)
     {
         return pagoRepository.findById(id);
@@ -47,13 +46,10 @@ public class PagoService
             pago.setEstadoPago("MONTO_INSUFICIENTE");
         }
         
-        // Seteo automático de la fecha del sistema
         pago.setFechaPago(LocalDate.now());
         
-        // Persistencia en nuestra base de datos local
         Pago pagoGuardado = pagoRepository.save(pago);
         
-        // Comunicación externa con el microservicio de Pedidos
         if (!pagoGuardado.getEstadoPago().equals("MONTO_INSUFICIENTE")) {
             try {
                 String urlPedido = "http://localhost:8080/pedidos/" + pagoGuardado.getPedidoId() + "/estado";

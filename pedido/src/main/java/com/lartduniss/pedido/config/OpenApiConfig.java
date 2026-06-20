@@ -19,7 +19,6 @@ public class OpenApiConfig {
                         .title("L'art du niss - Microservicio de Pedidos")
                         .version("1.0")
                         .description("Documentación centralizada del Sistema de Pedidos y Ventas"))
-                // --- Redirección obligatoria a través del API Gateway ---
                 .servers(List.of(
                         new Server().url("http://localhost:8093").description("API Gateway")
                 ));

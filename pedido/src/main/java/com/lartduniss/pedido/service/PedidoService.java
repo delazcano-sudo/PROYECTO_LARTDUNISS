@@ -23,13 +23,12 @@ public class PedidoService
         return pedidoRepository.findAll();
     }
 
-    // Agregamos @NonNull como en el buscarPorId de la profe
     public Optional<Pedido> buscarPorId(@NonNull Long id)
     {
         return pedidoRepository.findById(id);
     }
 
-    @Transactional // Buena práctica para operaciones de guardado
+    @Transactional 
     public Pedido crear(Pedido pedido)
     {
         pedido.setFechaCreacion(LocalDate.now());
@@ -40,7 +39,6 @@ public class PedidoService
     @Transactional
     public Pedido actualizarEstado(@NonNull Long id, String nuevoEstado) 
     {
-        // En vez de orElse(null), usamos orElseThrow para encajar con la gestión de errores global
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado con el ID: " + id));
         

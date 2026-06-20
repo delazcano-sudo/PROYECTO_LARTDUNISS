@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/inventario")
+@RequestMapping("/api/v1/inventario")
 @Tag(name = "Inventario", description = "Operaciones relacionadas con el control de stock y existencias con soporte HATEOAS")
 @SuppressWarnings("null")
 public class InventarioController 

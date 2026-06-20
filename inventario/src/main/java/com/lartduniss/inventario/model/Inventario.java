@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import io.swagger.v3.oas.annotations.media.Schema; // Importante para la documentación interactiva
+import io.swagger.v3.oas.annotations.media.Schema; 
 
 @Entity
 @Table(name = "inventario")

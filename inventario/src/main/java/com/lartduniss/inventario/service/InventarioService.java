@@ -21,7 +21,7 @@ public class InventarioService
         return inventarioRepository.findAll();
     }
 
-    // Método individual por ID único exigido para el mapeo hipermedia HATEOAS
+  
     public Optional<Inventario> buscarPorId(@NonNull Long id) {
         return inventarioRepository.findById(id);
     }
@@ -30,7 +30,7 @@ public class InventarioService
         return inventarioRepository.findByProductoId(productoId);
     }
 
-    @Transactional // Asegura la atomicidad de la inserción o actualización directa
+    @Transactional 
     public Inventario guardar(Inventario nuevoInventario) {
         return inventarioRepository.save(nuevoInventario);
     }
@@ -42,22 +42,20 @@ public class InventarioService
         
         if (optInventario.isPresent()) {
             Inventario inventario = optInventario.get();
-            
-            // Regla de negocio: Validar si hay suficiente stock disponible
+         
             if (inventario.getCantidadDisponible() >= cantidadDescontar) {
                 int nuevoStock = inventario.getCantidadDisponible() - cantidadDescontar;
                 inventario.setCantidadDisponible(nuevoStock);
                 
                 inventarioRepository.save(inventario);
                 
-                // Alerta de stock crítico por consola
                 if (nuevoStock <= inventario.getStockMinimoAlerta()) {
                     System.out.println("ALERTA CRÍTICA: Stock bajo para el producto ID " + productoId + ". Quedan únicamente: " + nuevoStock + " unidades.");
                 }
                 
-                return true; // Descuento exitoso
+                return true; 
             }
         }
-        return false; // No hay stock suficiente o el producto no existe en inventario
+        return false;
     }
 }

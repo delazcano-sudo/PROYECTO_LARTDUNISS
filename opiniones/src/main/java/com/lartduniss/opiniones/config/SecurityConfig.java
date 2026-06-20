@@ -19,26 +19,26 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             
             .authorizeHttpRequests(auth -> auth
-                // Consultar opiniones o promedios (GET): Accesible para CLIENTES y ADMINISTRADORES
+                
                 .requestMatchers(HttpMethod.GET, "/opiniones/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
                 
-                // Publicar una reseña (POST): Permitido para CLIENTES y ADMINISTRADORES
+               
                 .requestMatchers(HttpMethod.POST, "/opiniones/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
                 
-                // Moderación profunda (PUT / DELETE): Acción exclusiva para el ADMINISTRADOR
+               
                 .requestMatchers(HttpMethod.PUT, "/opiniones/**").hasAnyAuthority("ADMINISTRADOR")
                 .requestMatchers(HttpMethod.DELETE, "/opiniones/**").hasAnyAuthority("ADMINISTRADOR")
                 
-                // Cualquier otra ruta interna requiere estar autenticado
+               
                 .anyRequest().authenticated()
             )
             
-            // 3. Manejo de excepciones en la cadena de filtros
+           
             .exceptionHandling(exception -> exception
-                // Cuando el usuario está autenticado pero no tiene rol (ej: CLIENTE tirando un DELETE)
+                
                 .accessDeniedHandler(new CustomAccessDeniedHandler())
                 
-                // Cuando no se envían las cabeceras requeridas desde el Gateway
+              
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(403);
@@ -46,7 +46,7 @@ public class SecurityConfig {
                 })
             )
             
-            // 4. Inyectamos tu filtro personalizado antes del filtro de autenticación por defecto
+           
             .addFilterBefore(new RequestHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

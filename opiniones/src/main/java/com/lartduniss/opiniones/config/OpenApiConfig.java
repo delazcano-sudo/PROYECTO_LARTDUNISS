@@ -18,7 +18,6 @@ public class OpenApiConfig {
                         .title("L'art du niss - Microservicio de Opiniones")
                         .version("1.0")
                         .description("Documentación centralizada del Sistema de Calificaciones y Reseñas"))
-                // --- Redirección obligatoria a través del API Gateway ---
                 .servers(List.of(
                         new Server().url("http://localhost:8098").description("API Gateway")
                 ));

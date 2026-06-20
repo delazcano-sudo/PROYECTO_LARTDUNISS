@@ -22,7 +22,6 @@ public class OpinionesService
         return opinionesRepository.findAll();
     }
 
-    // Método individual clave exigido por el patrón HATEOAS de la profe
     public Optional<Opiniones> buscarPorId(@NonNull Long id) {
         return opinionesRepository.findById(id);
     }
@@ -31,13 +30,13 @@ public class OpinionesService
         return opinionesRepository.findByProductoId(productoId);
     }
 
-    @Transactional // Mantenemos tu transacción de escritura en BD
+    @Transactional 
     public Opiniones guardar(Opiniones opiniones) {
         opiniones.setFechaPublicacion(LocalDate.now());
         return opinionesRepository.save(opiniones);
     }
 
-    // Mantenemos tu excelente método de promedio pero aplicando consistencia en el parámetro
+    
     public Double obtenerPromedioCalificacion(@NonNull Long productoId) {
         List<Opiniones> listaOpiniones = opinionesRepository.findByProductoId(productoId);
         if (listaOpiniones.isEmpty()) {

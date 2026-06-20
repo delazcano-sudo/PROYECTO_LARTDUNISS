@@ -28,15 +28,12 @@ public class RequestHeaderAuthenticationFilter extends OncePerRequestFilter {
                     .map(rol -> new SimpleGrantedAuthority(rol.trim().toUpperCase()))
                     .collect(Collectors.toList());
 
-            // Creamos el token de autenticación de Spring Security
             UsernamePasswordAuthenticationToken authentication = 
                     new UsernamePasswordAuthenticationToken(username, null, authorities);
             
-            // Seteamos la autenticación en el contexto seguro de Spring
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        // Continuar la cadena de filtros de forma segura
         filterChain.doFilter(request, response);
     }
 }
