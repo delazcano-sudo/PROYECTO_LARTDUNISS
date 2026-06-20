@@ -2,11 +2,10 @@ package com.lartduniss.pagos.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.servers.Server; // <-- Importante agregar este import
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List; 
+import java.util.List;
 
 @Configuration
 public class OpenApiConfig {
@@ -17,9 +16,9 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("API Lartduniss - Sistema de Pago")
                         .version("1.0")
-                        .description("Informacion de los pagos"))
+                        .description("Información de los pagos"))
                 .servers(List.of(
-                        new Server().url("http://localhost:8094").description("API Gateway")
+                        new Server().url("http://localhost:8093").description("Puerto Local de Pagos") // Puerto 8093!!!!!!!!!!
                 ));
     }
 }
