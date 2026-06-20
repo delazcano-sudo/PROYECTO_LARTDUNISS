@@ -9,24 +9,21 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class CustomAccessDeniedHandler implements AccessDeniedHandler 
-{
+public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
         
-        // 1. Configurar el tipo de respuesta a JSON y el estado 403
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpStatus.FORBIDDEN.value());
-
-        // 2. Construir un cuerpo JSON personalizado y claro para el usuario
+        
         String jsonResponse = String.format(
-            "{\"timestamp\": \"%s\", \"status\": 403, \"error\": \"Forbidden\", \"mensaje\": \"Lo sentimos, tu cuenta de PACIENTE no tiene permisos para realizar esta acción (crear, modificar o eliminar registros).\"}",
-            LocalDateTime.now()
+                "{\"timestamp\": \"%s\", \"status\": 403, \"error\": \"Forbidden\", " +
+                "\"mensaje\": \"Acceso denegado: Tu cuenta no posee los privilegios administrativos requeridos para modificar registros de pagos.\"}", // Listo corregi lo que se copio de paciente por lo relacioando a lo nuestro!!
+                LocalDateTime.now()
         );
-
-        // 3. Escribir la respuesta en el cuerpo
+        
         response.getWriter().write(jsonResponse);
     }
 }
