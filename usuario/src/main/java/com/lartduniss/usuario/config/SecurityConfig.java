@@ -9,25 +9,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity 
-public class SecurityConfig 
-{
+@EnableWebSecurity
+public class SecurityConfig {
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception 
-    {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/usuario/registrar", "/usuario/login").permitAll()
                 .anyRequest().authenticated()
             ).build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder()
-    {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }
