@@ -11,13 +11,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import model.Producto;
 import service.ProductoService;
@@ -72,7 +66,7 @@ public class ProductoController {
         return EntityModel.of(producto,
                 linkTo(methodOn(ProductoController.class).obtenerUno(id)).withSelfRel(),
                 linkTo(methodOn(ProductoController.class).listar()).withRel("todos-los-productos"),
-                linkTo(methodOn(ProductoController.class).actualizar(id, null)).withRel("actualizar-producto"));
+                linkTo(methodOn(ProductoController.class).actualizar(id, new Producto())).withRel("actualizar-producto"));
     }
 
     @Operation(summary = "Actualizar un producto existente", description = "Modifica los datos de un producto en el catálogo. Acción exclusiva de ADMINISTRADORES.")

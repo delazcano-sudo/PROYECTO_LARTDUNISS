@@ -16,9 +16,9 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("API Lartduniss - Catálogo de Productos")
                         .version("1.0")
-                        .description("Servicio encargado de la gestión de existencias y precios"))
+                        .description("Servicio encargado de la gestión de existencias y precios de catálogo"))
                 .servers(List.of(
-                        new Server().url("http://localhost:8092").description("Puerto Local de Productos")
+                        new Server().url("http://localhost:9090").description("API Gateway (Entrada Unificada)")
                 ));
     }
 }

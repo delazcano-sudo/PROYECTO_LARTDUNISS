@@ -8,9 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// Forzamos la importación manual de tu filtro para que se comunique con tus paquetes externos
-import com.lartduniss.productos.config.RequestHeaderAuthenticationFilter;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -20,9 +17,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET, "/api/v1/productos/**").permitAll() 
+                .requestMatchers(HttpMethod.GET, "/api/v1/productos/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/productos/**").hasAnyAuthority("ADMINISTRADOR")
-                .requestMatchers(HttpMethod.PUT, "/api/v1/productos/**").hasAnyAuthority("ADMINISTRADOR") // Tu método PUT protegido
+                .requestMatchers(HttpMethod.PUT, "/api/v1/productos/**").hasAnyAuthority("ADMINISTRADOR")
+                .requestMatchers("/productos/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception

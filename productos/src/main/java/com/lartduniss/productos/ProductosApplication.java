@@ -7,9 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.lartduniss.productos", "controller", "service", "com.lartduniss.productos.config"})
-@EntityScan(basePackages = {"model"})
-@EnableJpaRepositories(basePackages = {"repository"})
+@ComponentScan(basePackages = "com.lartduniss.productos")
+@EntityScan(basePackages = "com.lartduniss.productos.model")
+@EnableJpaRepositories(basePackages = "com.lartduniss.productos.repository")
 public class ProductosApplication {
     public static void main(String[] args) {
         SpringApplication.run(ProductosApplication.class, args);
