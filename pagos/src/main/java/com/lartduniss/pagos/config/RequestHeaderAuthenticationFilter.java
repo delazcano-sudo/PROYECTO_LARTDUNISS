@@ -27,7 +27,7 @@ public class RequestHeaderAuthenticationFilter extends OncePerRequestFilter {
                     .map(rol -> new SimpleGrantedAuthority(rol.trim().toUpperCase()))
                     .collect(Collectors.toList());
 
-            UsernamePasswordAuthenticationToken authentication = 
+            UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(username, null, authorities);
             
             SecurityContextHolder.getContext().setAuthentication(authentication);

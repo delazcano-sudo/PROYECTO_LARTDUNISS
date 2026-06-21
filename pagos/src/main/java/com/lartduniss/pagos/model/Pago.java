@@ -1,7 +1,6 @@
 package com.lartduniss.pagos.model;
 
 import java.time.LocalDate;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,11 +15,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Schema(description = "Represeta el pago de un pedido")
+@Schema(description = "Representa el pago de un pedido")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pago 
-{
+public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "ID único autoincremental del registro de pago", example = "1")
@@ -29,7 +27,7 @@ public class Pago
     @NotNull(message = "El id del pedido es obligatorio")
     @Positive(message = "El id del pedido debe ser un valor positivo")
     @Schema(description = "ID del pedido proveniente del microservicio de Pedidos", example = "10000", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long pedidoId; 
+    private Long pedidoId;
 
     @NotNull(message = "El monto total es obligatorio")
     @Positive(message = "El monto total debe ser un valor positivo")

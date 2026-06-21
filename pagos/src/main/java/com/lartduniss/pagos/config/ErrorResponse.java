@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ErrorResponse 
-{
+public class ErrorResponse {
     private int status;
     private String message;
     private long timestamp;

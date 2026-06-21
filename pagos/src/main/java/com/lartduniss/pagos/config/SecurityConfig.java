@@ -15,31 +15,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            
             .csrf(csrf -> csrf.disable())
-            
             .authorizeHttpRequests(auth -> auth
+                // Acceso público para Swagger de Pagos
+                .requestMatchers("/api/v1/pagos/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 
-                .requestMatchers(HttpMethod.GET, "/pagos/**")
-                    .hasAnyAuthority("ADMINISTRADOR", "CONTADOR")
-                
-                .requestMatchers(HttpMethod.POST, "/pagos/**")
-                    .hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
-                
-                .requestMatchers(HttpMethod.PUT, "/pagos/**").hasAnyAuthority("ADMINISTRADOR")
-                .requestMatchers(HttpMethod.DELETE, "/pagos/**").hasAnyAuthority("ADMINISTRADOR")
-                
+                // Endpoints protegidos
+                .requestMatchers(HttpMethod.GET, "/api/v1/pagos/**").hasAnyAuthority("ADMINISTRADOR", "CONTADOR")
+                .requestMatchers(HttpMethod.POST, "/api/v1/pagos/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/pagos/**").hasAnyAuthority("ADMINISTRADOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/pagos/**").hasAnyAuthority("ADMINISTRADOR")
                 .anyRequest().authenticated()
             )
-            
             .exceptionHandling(exception -> exception
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setContentType("application/json;charset=UTF-8");
                     response.setStatus(403);
                     response.getWriter().write("{\"status\": 403, \"error\": \"Forbidden\", \"mensaje\": \"Acceso denegado: No posees los privilegios requeridos para realizar acciones de pago.\"}");
                 })
             )
-            
             .addFilterBefore(new RequestHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

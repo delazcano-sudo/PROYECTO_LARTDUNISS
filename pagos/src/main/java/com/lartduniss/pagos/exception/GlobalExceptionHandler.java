@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.FORBIDDEN.value(),
-                "Acceso denegado: Esta función está reservada únicamente para los roles de CONTADOR y ADMINISTRADOR.", // Corregida <3
+                "Acceso denegado: Esta función está reservada únicamente para los roles de CONTADOR y ADMINISTRADOR.",
                 System.currentTimeMillis()
         );
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);

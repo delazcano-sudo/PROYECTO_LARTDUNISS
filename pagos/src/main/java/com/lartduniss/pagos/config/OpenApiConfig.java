@@ -18,7 +18,7 @@ public class OpenApiConfig {
                         .version("1.0")
                         .description("Información de los pagos"))
                 .servers(List.of(
-                        new Server().url("http://localhost:8093").description("Puerto Local de Pagos") // Puerto 8093!!!!!!!!!!
+                        new Server().url("http://localhost:9090").description("Puerto Unificado del API Gateway")
                 ));
     }
 }
