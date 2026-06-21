@@ -10,9 +10,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:8080") // Dirección de la api 
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+            .allowedOrigins("http://localhost:9090") // Puerto 9090 ya que el 8080 si no me equivoco esta bloqueada
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true);
     }
 }

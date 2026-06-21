@@ -1,92 +1,152 @@
 server:
-  port: 8080
+  port: 9090
 
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
+      # Agregamos el cors que se nos olvido 
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:9090"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+      
       routes:
         # 1. Clientes
         - id: clientes-service
           uri: http://localhost:8091
           predicates:
-            - Path=/clientes
+            - Path=/api/v1/clientes/**
+        - id: clientes-docs
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/v1/clientes/v3/api-docs
 
         # 2. Productos
         - id: productos-service
           uri: http://localhost:8092
           predicates:
-            - Path=/productos
+            - Path=/api/v1/productos/**
+        - id: productos-docs
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/v1/productos/v3/api-docs
 
         # 3. Pagos
         - id: pagos-service
           uri: http://localhost:8093
           predicates:
-            - Path=/pagos
+            - Path=/api/v1/pagos/**
+        - id: pagos-docs
+          uri: http://localhost:8093
+          predicates:
+            - Path=/api/v1/pagos/v3/api-docs
 
         # 4. Pedidos
         - id: pedidos-service
           uri: http://localhost:8094
           predicates:
-            - Path=/pedidos
+            - Path=/api/v1/pedidos/**
+        - id: pedidos-docs
+          uri: http://localhost:8094
+          predicates:
+            - Path=/api/v1/pedidos/v3/api-docs
 
         # 5. Usuarios
         - id: usuarios-service
           uri: http://localhost:8095
           predicates:
-            - Path=/usuarios
+            - Path=/api/v1/usuarios/**
+        - id: usuarios-docs
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/v1/usuarios/v3/api-docs
 
-        # 6. Despachos 
+        # 6. Despachos
         - id: servicio-despachos
           uri: http://localhost:8097
           predicates:
-            - Path=/api/despachos
+            - Path=/api/v1/despachos/**
+        - id: despachos-docs
+          uri: http://localhost:8097
+          predicates:
+            - Path=/api/v1/despachos/v3/api-docs
 
-        # 7. Inventario 
+        # 7. Inventario
         - id: servicio-inventario
           uri: http://localhost:8099
           predicates:
-            - Path=/api/inventario
+            - Path=/api/v1/inventario/**
+        - id: inventario-docs
+          uri: http://localhost:8099
+          predicates:
+            - Path=/api/v1/inventario/v3/api-docs
 
-        # 8. Notificaciones 
+        # 8. Notificaciones
         - id: servicio-notificaciones
           uri: http://localhost:8071
           predicates:
-            - Path=/api/notificaciones
+            - Path=/api/v1/notificaciones/**
+        - id: notificaciones-docs
+          uri: http://localhost:8071
+          predicates:
+            - Path=/api/v1/notificaciones/v3/api-docs
 
-        # 9. Reportes 
+        # 9. Reportes
         - id: servicio-reportes
           uri: http://localhost:8096
           predicates:
-            - Path=/api/reportes
+            - Path=/api/v1/reportes/**
+        - id: reportes-docs
+          uri: http://localhost:8096
+          predicates:
+            - Path=/api/v1/reportes/v3/api-docs
 
         # 10. Opiniones
         - id: servicio-opiniones
           uri: http://localhost:8098
           predicates:
-            - Path=/api/opiniones
+            - Path=/api/v1/opiniones/**
+        - id: opiniones-docs
+          uri: http://localhost:8098
+          predicates:
+            - Path=/api/v1/opiniones/v3/api-docs
 
-# Configuración exacta de Swagger UI para cada microservicio
+# Desactivar Eureka tal como lo muestra el ejemplo
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+# Agregando las interfaces de Swagger
+springdoc:
   swagger-ui:
     urls:
-      - name: Clientes
-        url: /clientes/v3/api-docs
-      - name: Productos
-        url: /productos/v3/api-docs
-      - name: Pagos
-        url: /pagos/v3/api-docs
-      - name: Pedidos
-        url: /pedidos/v3/api-docs
-      - name: Usuarios
-        url: /usuarios/v3/api-docs
-      - name: Despachos
-        url: /api/despachos/v3/api-docs
-      - name: Inventario
-        url: /api/inventario/v3/api-docs
-      - name: Notificaciones
-        url: /api/notificaciones/v3/api-docs
-      - name: Reportes
-        url: /api/reportes/v3/api-docs
-      - name: Opiniones
-        url: /api/opiniones/v3/api-docs
+      - name: 1. Servicio Clientes
+        url: /api/v1/clientes/v3/api-docs
+      - name: 2. Servicio Productos
+        url: /api/v1/productos/v3/api-docs
+      - name: 3. Servicio Pagos
+        url: /api/v1/pagos/v3/api-docs
+      - name: 4. Servicio Pedidos
+        url: /api/v1/pedidos/v3/api-docs
+      - name: 5. Servicio Usuarios
+        url: /api/v1/usuarios/v3/api-docs
+      - name: 6. Servicio Despachos
+        url: /api/v1/despachos/v3/api-docs
+      - name: 7. Servicio Inventario
+        url: /api/v1/inventario/v3/api-docs
+      - name: 8. Servicio Notificaciones
+        url: /api/v1/notificaciones/v3/api-docs
+      - name: 9. Servicio Reportes
+        url: /api/v1/reportes/v3/api-docs
+      - name: 10. Servicio Opiniones
+        url: /api/v1/opiniones/v3/api-docs

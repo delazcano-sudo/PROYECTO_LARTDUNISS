@@ -35,3 +35,4 @@ public class Despacho {
     @NotNull(message = "El costo de envío es obligatorio")
     private Double costoEnvio;
 }
+

@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 import model.Despacho;
 import service.DespachoService;
 
-// ANOTACIONES SWAGGER
+// ANOTACIONES SWAGGER!!!!!!!!!!
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,15 +38,16 @@ public class DespachoController {
         Despacho nuevo = despachoService.guardarDespacho(despacho);
         return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
     }
-
+// Añadimos el runtime exception para manejar el caso de que no se encuentre el despacho, y así devolver un mensaje más claro al cliente
     @GetMapping("/{id}")
     @Operation(summary = "Obtener un despacho por ID", description = "Busca un despacho específico en la base de datos a partir de su ID")
     @ApiResponse(responseCode = "200", description = "Despacho encontrado")
-    @ApiResponse(responseCode = "404", description = "Despacho no encontrado")
+    @ApiResponse(responseCode = "404", description = "Despacho no encontrado", 
+                 content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = exception.ErrorResponse.class)))
     public ResponseEntity<Despacho> obtenerUno(@PathVariable Long id) {
-        return despachoService.buscarPorId(id)
-                .map(d -> new ResponseEntity<>(d, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Despacho despacho = despachoService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("El despacho con ID " + id + " no existe en el sistema."));
+        return new ResponseEntity<>(despacho, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
