@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Inventario 
-{
+public class Inventario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,9 +29,7 @@ public class Inventario
     @Min(value = 0, message = "La cantidad en stock no puede ser negativa")
     private Integer cantidadDisponible;
 
-    
     @NotNull(message = "El stock mínimo de alerta es obligatorio")
     @Min(value = 0, message = "El stock mínimo no puede ser negativo")
-    private Integer stockMinimoAlerta; 
-    // Ej: Si baja de 5, el sistema debería avisar que queda poco
+    private Integer stockMinimoAlerta;
 }

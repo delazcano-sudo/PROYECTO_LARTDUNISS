@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import com.lartduniss.inventario.model.Inventario;
 import com.lartduniss.inventario.service.InventarioService;
-import jakarta.validation.Valid;
 
-// ANOTACIONES SWAGGER
+// ANOTACIONES SWAGGER <3 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,11 +32,12 @@ public class InventarioController {
     @GetMapping("/producto/{productoId}")
     @Operation(summary = "Obtener inventario por ID de Producto", description = "Busca el registro de stock asociado a un producto específico")
     @ApiResponse(responseCode = "200", description = "Registro de inventario encontrado")
-    @ApiResponse(responseCode = "404", description = "Producto no registrado en el inventario")
+    @ApiResponse(responseCode = "404", description = "Producto no registrado en el inventario",
+                 content = @io.swagger.v3.oas.annotations.media.Content(schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = exception.ErrorResponse.class)))
     public ResponseEntity<Inventario> obtenerPorProducto(@PathVariable Long productoId) {
-        return inventarioService.buscarPorProducto(productoId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Inventario inventario = inventarioService.buscarPorProducto(productoId)
+                .orElseThrow(() -> new RuntimeException("El producto con ID " + productoId + " no se encuentra registrado en el inventario."));
+        return new ResponseEntity<>(inventario, HttpStatus.OK);
     }
 
     @PostMapping

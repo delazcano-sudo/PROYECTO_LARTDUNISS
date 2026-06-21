@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
 import com.lartduniss.inventario.model.Inventario;
 import com.lartduniss.inventario.repository.InventarioRepository;
-import jakarta.transaction.Transactional;
 
 @Service
-public class InventarioService 
-{
+public class InventarioService {
+
     @Autowired
     private InventarioRepository inventarioRepository;
 
@@ -27,14 +27,12 @@ public class InventarioService
     }
 
     @Transactional
-    public boolean descontarStock(Long productoId, Integer cantidadDescontar) 
-    {
+    public boolean descontarStock(Long productoId, Integer cantidadDescontar) {
         Optional<Inventario> optInventario = inventarioRepository.findByProductoId(productoId);
         
         if (optInventario.isPresent()) {
             Inventario inventario = optInventario.get();
             
-            // Regla de negocio: Validar si hay suficiente stock disponible
             if (inventario.getCantidadDisponible() >= cantidadDescontar) {
                 int nuevoStock = inventario.getCantidadDisponible() - cantidadDescontar;
                 inventario.setCantidadDisponible(nuevoStock);
@@ -42,12 +40,12 @@ public class InventarioService
                 inventarioRepository.save(inventario);
                 
                 if (nuevoStock <= inventario.getStockMinimoAlerta()) {
-                    System.out.println("No hay stock disponible de:" + productoId + "Queda unicamente; " + nuevoStock);
+                    System.out.println("No hay stock disponible de: " + productoId + " Queda unicamente; " + nuevoStock);
                 }
                 
-                return true; // Descuento exitoso
+                return true; 
             }
         }
-        return false; // No hay stock suficiente o el producto no existe en inventario
+        return false; 
     }
 }

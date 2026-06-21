@@ -24,7 +24,7 @@ class InventarioServiceTest {
 
     @Test
     void descontarStockExitosoTest() {
-        // 1. Arrange 
+        // 1. Arrange
         Long productoId = 101L;
         Integer cantidadADescontar = 3;
         Inventario inventarioMock = new Inventario(1L, productoId, 10, 5);
@@ -32,10 +32,10 @@ class InventarioServiceTest {
         when(inventarioRepository.findByProductoId(productoId)).thenReturn(Optional.of(inventarioMock));
         when(inventarioRepository.save(any(Inventario.class))).thenReturn(inventarioMock);
 
-        // 2. Act 
+        // 2. Act
         boolean resultado = inventarioService.descontarStock(productoId, cantidadADescontar);
 
-        // 3. Assert 
+        // 3. Assert
         assertTrue(resultado);
         assertEquals(7, inventarioMock.getCantidadDisponible()); // 10 - 3 = 7
         verify(inventarioRepository, times(1)).findByProductoId(productoId);
@@ -46,7 +46,7 @@ class InventarioServiceTest {
     void descontarStockInsuficienteTest() {
         // 1. Arrange
         Long productoId = 101L;
-        Integer cantidadADescontar = 15; // Mayor que el stock disponible
+        Integer cantidadADescontar = 15; // Es mayor que el stock disponible
         Inventario inventarioMock = new Inventario(1L, productoId, 10, 5);
 
         when(inventarioRepository.findByProductoId(productoId)).thenReturn(Optional.of(inventarioMock));

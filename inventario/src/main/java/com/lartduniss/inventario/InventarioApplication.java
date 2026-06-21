@@ -12,7 +12,8 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan(basePackages = {
     "com.lartduniss.inventario.controller",
     "com.lartduniss.inventario.service",
-    "com.lartduniss.inventario.config" // AGREGADO: Para escaneo de CORS y Swagger
+    "com.lartduniss.inventario.config",
+    "exception" 
 })
 @EntityScan(basePackages = {"com.lartduniss.inventario.model"})
 @EnableJpaRepositories(basePackages = {"com.lartduniss.inventario.repository"})
