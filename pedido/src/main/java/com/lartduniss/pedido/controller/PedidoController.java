@@ -11,13 +11,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.lartduniss.pedido.model.Pedido;
 import com.lartduniss.pedido.service.PedidoService;
@@ -28,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1/pedidos")
+@RequestMapping("/api/v1/pedidos")
 @Tag(name = "Pedidos", description = "Operaciones relacionadas con la gestión de pedidos con soporte HATEOAS")
 @SuppressWarnings("null")
 public class PedidoController {

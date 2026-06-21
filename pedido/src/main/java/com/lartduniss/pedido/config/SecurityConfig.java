@@ -17,10 +17,13 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET, "/pedidos/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
-                .requestMatchers(HttpMethod.POST, "/pedidos/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
-                .requestMatchers(HttpMethod.PUT, "/pedidos/**").hasAnyAuthority("ADMINISTRADOR")
-                .requestMatchers(HttpMethod.DELETE, "/pedidos/**").hasAnyAuthority("ADMINISTRADOR")
+                // Acceso público para Swagger de Pedidos
+                .requestMatchers("/api/v1/pedidos/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                
+                .requestMatchers(HttpMethod.GET, "/api/v1/pedidos/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
+                .requestMatchers(HttpMethod.POST, "/api/v1/pedidos/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/pedidos/**").hasAnyAuthority("ADMINISTRADOR")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/pedidos/**").hasAnyAuthority("ADMINISTRADOR")
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception

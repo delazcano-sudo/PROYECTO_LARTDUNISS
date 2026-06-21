@@ -36,7 +36,7 @@ class PedidoServiceTest {
         // 2. Act
         Pedido resultado = pedidoService.crear(pedidoInput);
 
-        // 3. Assert 
+        // 3. Assert
         assertNotNull(resultado);
         assertEquals("PENDIENTE_PAGO", resultado.getEstadoPedido());
         Mockito.verify(pedidoRepository, Mockito.times(1)).save(pedidoInput);
