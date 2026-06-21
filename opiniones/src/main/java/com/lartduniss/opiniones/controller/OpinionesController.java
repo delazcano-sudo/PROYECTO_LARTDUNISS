@@ -4,12 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import com.lartduniss.opiniones.model.Opiniones;
@@ -19,6 +14,8 @@ import com.lartduniss.opiniones.service.OpinionesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/opiniones")
@@ -38,8 +35,14 @@ public class OpinionesController {
     @GetMapping("/producto/{productoId}")
     @Operation(summary = "Obtener opiniones por Producto", description = "Recupera todas las reseñas asociadas a un ID de producto específico")
     @ApiResponse(responseCode = "200", description = "Reseñas del producto localizadas exitosamente")
+    @ApiResponse(responseCode = "404", description = "No se encontraron opiniones para el producto indicado", 
+                 content = @Content(schema = @Schema(implementation = exception.ErrorResponse.class)))
     public ResponseEntity<List<Opiniones>> obtenerPorProducto(@PathVariable Long productoId) {
-        return ResponseEntity.ok(opinionesService.buscarPorProducto(productoId));
+        List<Opiniones> opiniones = opinionesService.buscarPorProducto(productoId);
+        if (opiniones.isEmpty()) {
+            throw new RuntimeException("No se encontraron opiniones registradas para el producto con ID " + productoId);
+        }
+        return ResponseEntity.ok(opiniones);
     }
 
     @GetMapping("/producto/{productoId}/promedio")

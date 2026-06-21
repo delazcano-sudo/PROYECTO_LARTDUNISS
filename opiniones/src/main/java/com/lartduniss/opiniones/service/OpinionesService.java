@@ -4,13 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.lartduniss.opiniones.model.Opiniones; 
+import com.lartduniss.opiniones.model.Opiniones;
 import com.lartduniss.opiniones.repository.OpinionesRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class OpinionesService 
-{
+public class OpinionesService {
+
     @Autowired
     private OpinionesRepository opinionesRepository;
 
@@ -33,11 +33,11 @@ public class OpinionesService
         if (listaOpiniones.isEmpty()) {
             return 0.0;
         }
-        
+      
         double suma = listaOpiniones.stream()
-                                   .mapToDouble(Opiniones::getCalificacion)
-                                   .sum();
-                                   
+                                    .mapToDouble(Opiniones::getCalificacion)
+                                    .sum();
+                                 
         return suma / listaOpiniones.size();
     }
 }

@@ -10,12 +10,14 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
+    "com.lartduniss.opiniones",
     "com.lartduniss.opiniones.controller",
     "com.lartduniss.opiniones.service",
-    "com.lartduniss.opiniones.config" // aqui habilitamos el swagger y el Cors 
+    "com.lartduniss.opiniones.config",
+    "exception"
 })
-@EntityScan(basePackages = {"com.lartduniss.opiniones.model"})
-@EnableJpaRepositories(basePackages = {"com.lartduniss.opiniones.repository"})
+@EntityScan(basePackages = {"model"})
+@EnableJpaRepositories(basePackages = {"repository"})
 public class OpinionesApplication {
 
     public static void main(String[] args) {

@@ -2,6 +2,7 @@ package com.lartduniss.opiniones.service;
 
 import com.lartduniss.opiniones.model.Opiniones;
 import com.lartduniss.opiniones.repository.OpinionesRepository;
+import com.lartduniss.opiniones.service.OpinionesService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
