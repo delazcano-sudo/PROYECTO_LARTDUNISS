@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "notificaciones") // Este sera el nombre de nuestra base de datos <3
+@Table(name = "notificaciones")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

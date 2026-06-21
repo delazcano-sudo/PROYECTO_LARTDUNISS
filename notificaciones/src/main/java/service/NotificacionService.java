@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-// Usamos la metodologia CRUD completa <3
 @Service
 public class NotificacionService {
 
@@ -20,7 +19,6 @@ public class NotificacionService {
     }
 
     public Notificacion guardarNotificacion(Notificacion notificacion) {
-        // Si no viene con fecha, le asignamos la hora actual automáticamente
         if (notificacion.getFechaEnvio() == null) {
             notificacion.setFechaEnvio(LocalDateTime.now());
         }

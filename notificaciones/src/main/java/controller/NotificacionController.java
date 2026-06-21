@@ -13,6 +13,8 @@ import service.NotificacionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/api/notificaciones")
@@ -42,31 +44,34 @@ public class NotificacionController {
     @GetMapping("/{id}")
     @Operation(summary = "Obtener notificación por ID", description = "Busca los detalles de una notificación específica a través de su ID único")
     @ApiResponse(responseCode = "200", description = "Notificación encontrada")
-    @ApiResponse(responseCode = "404", description = "Notificación no localizada")
+    @ApiResponse(responseCode = "404", description = "Notificación no encontrada", 
+                 content = @Content(schema = @Schema(implementation = exception.ErrorResponse.class)))
     public ResponseEntity<Notificacion> obtenerUna(@PathVariable Long id) {
-        return notificacionService.buscarPorId(id)
-                .map(n -> new ResponseEntity<>(n, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Notificacion notificacion = notificacionService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("La notificación con ID " + id + " no existe en el sistema."));
+        return new ResponseEntity<>(notificacion, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar una notificación existente", description = "Modifica los valores de destinatario, tipo, mensaje o fecha buscando por ID")
     @ApiResponse(responseCode = "200", description = "Notificación actualizada de forma exitosa")
-    @ApiResponse(responseCode = "404", description = "La notificación con el ID indicado no existe")
+    @ApiResponse(responseCode = "404", description = "La notificación con el ID indicado no existe", 
+                 content = @Content(schema = @Schema(implementation = exception.ErrorResponse.class)))
     public ResponseEntity<Notificacion> actualizar(@PathVariable Long id, @Valid @RequestBody Notificacion notificacion) {
-        return notificacionService.actualizarNotificacion(id, notificacion)
-                .map(n -> new ResponseEntity<>(n, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Notificacion actualizada = notificacionService.actualizarNotificacion(id, notificacion)
+                .orElseThrow(() -> new RuntimeException("No se pudo actualizar. La notificación con ID " + id + " no existe en el sistema."));
+        return new ResponseEntity<>(actualizada, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar una notificación", description = "Remueve de manera permanente el registro del historial mediante su ID")
-    @ApiResponse(responseCode = "200", description = "Notificación eliminada correctamente")
-    @ApiResponse(responseCode = "404", description = "No se encontró el registro para eliminar")
+    @ApiResponse(responseCode = "200", description = "Notificación miembro eliminada correctamente")
+    @ApiResponse(responseCode = "404", description = "No se encontró el registro para eliminar", 
+                 content = @Content(schema = @Schema(implementation = exception.ErrorResponse.class)))
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        if (notificacionService.eliminarNotificacion(id)) {
-            return new ResponseEntity<>("Notificación eliminada correctamente", HttpStatus.OK);
+        if (!notificacionService.eliminarNotificacion(id)) {
+            throw new RuntimeException("No se encontró la notificación a eliminar con el ID: " + id);
         }
-        return new ResponseEntity<>("No se encontró la notificación a eliminar", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Notificación eliminada correctamente", HttpStatus.OK);
     }
 }

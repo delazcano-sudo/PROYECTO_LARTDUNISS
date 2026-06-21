@@ -25,19 +25,19 @@ class NotificacionServiceTest {
 
     @Test
     void guardarNotificacionAsignaFechaActualTest() {
-        // 1. Arrange 
+        // 1. Arrange
         Notificacion notificacionMock = new Notificacion(null, "denisse@test.com", "Email", "Tu orden está lista", null);
         Notificacion notificacionGuardada = new Notificacion(1L, "denisse@test.com", "Email", "Tu orden está lista", LocalDateTime.now());
         
         when(notificacionRepository.save(any(Notificacion.class))).thenReturn(notificacionGuardada);
 
-        // 2. Act 
+        // 2. Act
         Notificacion resultado = notificacionService.guardarNotificacion(notificacionMock);
 
-        // 3. Assert 
+        // 3. Assert
         assertNotNull(resultado);
         assertEquals(1L, resultado.getId());
-        assertNotNull(notificacionMock.getFechaEnvio()); // Comprobamos que el servicio le asignó la fecha actual antes de guardar
+        assertNotNull(notificacionMock.getFechaEnvio()); // Comprobamos que el servicio le asignó la fecha actual
         verify(notificacionRepository, times(1)).save(notificacionMock);
     }
 
