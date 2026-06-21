@@ -18,7 +18,7 @@ public class OpenApiConfig {
                         .version("1.0")
                         .description("Servicio encargado de la administración de usuarios y perfiles de compradores"))
                 .servers(List.of(
-                        new Server().url("http://localhost:8091").description("Puerto de Clientes en Universidad")
+                        new Server().url("http://localhost:9090").description("API Gateway (Entrada Unificada)")
                 ));
     }
 }

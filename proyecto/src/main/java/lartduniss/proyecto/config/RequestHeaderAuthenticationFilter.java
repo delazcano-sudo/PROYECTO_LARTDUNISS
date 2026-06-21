@@ -19,12 +19,12 @@ public class RequestHeaderAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         
-        String username = request.getHeader("X-User-Username");
+        String username = request.getHeader("X-Username");
         String rolesStr = request.getHeader("X-User-Roles");
 
         if (username != null && rolesStr != null && !rolesStr.trim().isEmpty()) {
             List<SimpleGrantedAuthority> authorities = Arrays.stream(rolesStr.split(","))
-                    .map(rol -> new SimpleGrantedAuthority(rol.trim().toUpperCase()))
+                    .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.trim().toUpperCase()))
                     .collect(Collectors.toList());
 
             UsernamePasswordAuthenticationToken authentication =

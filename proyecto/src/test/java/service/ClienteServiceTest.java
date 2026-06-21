@@ -26,16 +26,16 @@ class ClienteServiceTest {
 
     @Test
     void guardarClienteExitosoTest() {
-        // 1. Arrange <3
+        // 1. Arrange
         Cliente clienteInput = new Cliente(null, "Denisse Lazcano", "denisse@lartduniss.com", "+56912345678");
         Cliente clienteGuardado = new Cliente(1L, "Denisse Lazcano", "denisse@lartduniss.com", "+56912345678");
 
         Mockito.when(clienteRepository.save(any(Cliente.class))).thenReturn(clienteGuardado);
 
-        // 2. Act <3
+        // 2. Act
         Cliente resultado = clienteService.guardarCliente(clienteInput);
 
-        // 3. Assert <3
+        // 3. Assert
         assertNotNull(resultado);
         assertEquals(1L, resultado.getId());
         assertEquals("denisse@lartduniss.com", resultado.getEmail());

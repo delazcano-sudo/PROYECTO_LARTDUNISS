@@ -1,12 +1,13 @@
-package com.lartduniss.usuario.config;
+package com.lartduniss.inventario.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,11 +22,28 @@ public class SecurityConfig {
         return http
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .addFilterBefore(new RequestHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/usuario/registrar", "/usuario/login").permitAll()
-                .requestMatchers("/auth/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                // Documentación abierta
+                .requestMatchers("/api/inventario/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                
+                // Reglas operativas para Inventario
+                .requestMatchers(HttpMethod.GET, "/api/inventario/**").hasAnyRole("ADMIN", "EMPLEADO", "CLIENTE")
+                .requestMatchers(HttpMethod.POST, "/api/inventario/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.PUT, "/api/inventario/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.DELETE, "/api/inventario/**").hasRole("ADMIN")
+                
                 .anyRequest().authenticated()
-            ).build();
+            )
+            .exceptionHandling(exception -> exception
+                .accessDeniedHandler(accessDeniedHandler())
+            )
+            .build();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 
     @Bean
@@ -38,10 +56,5 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

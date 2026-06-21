@@ -1,13 +1,13 @@
-package com.lartduniss.productos.config;
+package com.lartduniss.inventario.config;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -20,18 +20,19 @@ public class RequestHeaderAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         
         String username = request.getHeader("X-Username");
-        String rolesStr = request.getHeader("X-User-Roles");
+        String rolesHeader = request.getHeader("X-User-Roles");
 
-        if (username != null && rolesStr != null && !rolesStr.trim().isEmpty()) {
-            List<SimpleGrantedAuthority> authorities = Arrays.stream(rolesStr.split(","))
+        if (username != null && rolesHeader != null) {
+            List<SimpleGrantedAuthority> authorities = Arrays.stream(rolesHeader.split(","))
                     .map(rol -> new SimpleGrantedAuthority("ROLE_" + rol.trim().toUpperCase()))
                     .collect(Collectors.toList());
 
-            UsernamePasswordAuthenticationToken authentication =
+            UsernamePasswordAuthenticationToken auth = 
                     new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
+
         filterChain.doFilter(request, response);
     }
 }

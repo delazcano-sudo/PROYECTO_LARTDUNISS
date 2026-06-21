@@ -5,12 +5,11 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "clientes")
@@ -26,11 +25,9 @@ public class Cliente {
     @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
 
-    @Email(message = "Formato de email inválido")
     @NotBlank(message = "El email es obligatorio")
-    @Column(unique = true)
+    @Email(message = "El formato del email no es válido")
     private String email;
 
     private String telefono;
-    
 }

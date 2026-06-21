@@ -12,13 +12,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import model.Cliente;
 import service.ClienteService;
@@ -73,7 +67,7 @@ public class ClienteController {
         return EntityModel.of(cliente,
                 linkTo(methodOn(ClienteController.class).obtenerUno(id)).withSelfRel(),
                 linkTo(methodOn(ClienteController.class).listar()).withRel("todos-los-clientes"),
-                linkTo(methodOn(ClienteController.class).actualizar(id, null)).withRel("actualizar-cliente"));
+                linkTo(methodOn(ClienteController.class).actualizar(id, new Cliente())).withRel("actualizar-cliente"));
     }
 
     @Operation(summary = "Actualizar datos de un cliente", description = "Permite modificar el nombre, email o teléfono de un cliente existente")
