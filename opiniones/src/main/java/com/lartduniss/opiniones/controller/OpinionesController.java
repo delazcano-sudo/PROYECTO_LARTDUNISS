@@ -1,7 +1,7 @@
 package com.lartduniss.opiniones.controller;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +18,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
-@RequestMapping("/opiniones")
+@RequestMapping("/api/v1/opiniones")
 @Tag(name = "Controlador de Opiniones", description = "Endpoints para gestionar las reseñas y calificaciones de los productos")
 public class OpinionesController {
 
-    @Autowired
-    private OpinionesService opinionesService;
+    private final OpinionesService opinionesService;
+
+    public OpinionesController(OpinionesService opinionesService) {
+        this.opinionesService = opinionesService;
+    }
 
     @GetMapping
     @Operation(summary = "Listar todas las opiniones", description = "Retorna el historial global de reseñas almacenadas en la plataforma")
@@ -57,7 +60,7 @@ public class OpinionesController {
     @ApiResponse(responseCode = "201", description = "Opinión publicada correctamente")
     @ApiResponse(responseCode = "400", description = "Cuerpo de petición no válido (por ejemplo, calificación fuera del rango 1-5)")
     public ResponseEntity<Opiniones> crear(@Valid @RequestBody Opiniones opiniones) {
-        Opiniones nuevaOpinion = opinionesService.guardar(opiniones);
+        Opiniones nuevaOpinion = Objects.requireNonNull(opinionesService.guardar(opiniones), "La respuesta de guardar no puede ser null");
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaOpinion);
     }
 }

@@ -5,7 +5,6 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.lartduniss.pagos.model.Pago;
 import com.lartduniss.pagos.service.PagoService;
-import io.micrometer.common.lang.NonNull;
+import org.springframework.lang.NonNull;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -27,8 +26,11 @@ import jakarta.validation.Valid;
 @SuppressWarnings("null")
 public class PagoController {
 
-    @Autowired
-    private PagoService pagoService;
+    private final PagoService pagoService;
+
+    public PagoController(PagoService pagoService) {
+        this.pagoService = pagoService;
+    }
 
     @Operation(summary = "Obtener todos los pagos", description = "Retorna una colección de pagos con sus respectivos enlaces hipermedia")
     @GetMapping
@@ -48,7 +50,7 @@ public class PagoController {
         @ApiResponse(responseCode = "404", description = "El registro de pago no existe")
     })
     @GetMapping("/{id}")
-    public EntityModel<Pago> obtener(@NonNull @PathVariable Long id) {
+    public EntityModel<Pago> obtener(@PathVariable @NonNull Long id) {
         Pago pago = pagoService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
         return EntityModel.of(pago,
@@ -59,7 +61,7 @@ public class PagoController {
 
     @Operation(summary = "Crear un nuevo registro de pago", description = "Procesa el monto y notifica al microservicio de Pedidos")
     @PostMapping
-    public ResponseEntity<EntityModel<Pago>> crear(@NonNull @Valid @RequestBody Pago pago) {
+    public ResponseEntity<EntityModel<Pago>> crear(@Valid @RequestBody Pago pago) {
         Pago nuevoPago = pagoService.guardar(pago);
         EntityModel<Pago> recurso = EntityModel.of(nuevoPago,
                 linkTo(methodOn(PagoController.class).obtener(nuevoPago.getId())).withSelfRel(),
@@ -69,7 +71,7 @@ public class PagoController {
 
     @Operation(summary = "Eliminar un registro de pago")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@NonNull @PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable @NonNull Long id) {
         pagoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }

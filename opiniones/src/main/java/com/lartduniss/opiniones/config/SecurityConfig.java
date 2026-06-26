@@ -24,12 +24,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .addFilterBefore(new RequestHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
-                // Endpoints de Swagger expuestos
-                .requestMatchers("/api/opiniones/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 
-                // Reglas de acceso para el controlador de opiniones
-                .requestMatchers(HttpMethod.GET, "/opiniones/**").permitAll() // Reseñas públicas para que los visitantes las vean
-                .requestMatchers(HttpMethod.POST, "/opiniones/**").hasAnyRole("CLIENTE", "ADMIN", "EMPLEADO") // Clientes publican su feedback
+                .requestMatchers("/api/v1/opiniones/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                
+                .requestMatchers(HttpMethod.GET, "/api/v1/opiniones/**").permitAll() // Reseñas públicas para que los visitantes las vean
+                .requestMatchers(HttpMethod.POST, "/api/v1/opiniones/**").hasAnyRole("CLIENTE", "ADMIN", "EMPLEADO") // Clientes publican su feedback
                 
                 .anyRequest().authenticated()
             )

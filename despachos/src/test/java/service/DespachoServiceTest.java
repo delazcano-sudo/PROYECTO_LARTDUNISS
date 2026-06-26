@@ -25,7 +25,6 @@ class DespachoServiceTest {
     @Test
     void guardarDespachoTest() {
         // 1. Arrange 
-        // Campos: id, direccionEntrega, estado, fechaProgramada, costoEnvio
         Despacho despachoMock = new Despacho(null, "Av. Vitacura 1234", "PENDIENTE", LocalDate.now(), 4500.0);
         Despacho despachoGuardado = new Despacho(1L, "Av. Vitacura 1234", "PENDIENTE", LocalDate.now(), 4500.0);
 

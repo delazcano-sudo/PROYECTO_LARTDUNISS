@@ -3,22 +3,23 @@ package com.lartduniss.pagos.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.lartduniss.pagos.model.Pago;
 import com.lartduniss.pagos.repository.PagoRepository;
-import io.micrometer.common.lang.NonNull;
+import org.springframework.lang.NonNull;
 import jakarta.transaction.Transactional;
 
 @Service
 public class PagoService {
 
-    @Autowired
-    private PagoRepository pagoRepository;
-  
-    @Autowired
-    private RestTemplate restTemplate;
+    private final PagoRepository pagoRepository;
+    private final RestTemplate restTemplate;
+
+    public PagoService(PagoRepository pagoRepository, RestTemplate restTemplate) {
+        this.pagoRepository = pagoRepository;
+        this.restTemplate = restTemplate;
+    }
 
     public List<Pago> listarTodos() {
         return pagoRepository.findAll();
@@ -29,7 +30,7 @@ public class PagoService {
     }
 
     @Transactional
-    public Pago guardar(Pago pago) {
+    public Pago guardar(@NonNull Pago pago) {
         double abonoMinimo = pago.getMontoTotal() * 0.5;
       
         if (pago.getMontoPagado() >= pago.getMontoTotal()) {

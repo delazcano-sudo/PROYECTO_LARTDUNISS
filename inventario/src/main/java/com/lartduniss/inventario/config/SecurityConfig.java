@@ -25,13 +25,13 @@ public class SecurityConfig {
             .addFilterBefore(new RequestHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 // Documentación abierta
-                .requestMatchers("/api/inventario/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/api/v1/inventario/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 
                 // Reglas operativas para Inventario
-                .requestMatchers(HttpMethod.GET, "/api/inventario/**").hasAnyRole("ADMIN", "EMPLEADO", "CLIENTE")
-                .requestMatchers(HttpMethod.POST, "/api/inventario/**").hasAnyRole("ADMIN", "EMPLEADO")
-                .requestMatchers(HttpMethod.PUT, "/api/inventario/**").hasAnyRole("ADMIN", "EMPLEADO")
-                .requestMatchers(HttpMethod.DELETE, "/api/inventario/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/inventario/**").hasAnyRole("ADMIN", "EMPLEADO", "CLIENTE")
+                .requestMatchers(HttpMethod.POST, "/api/v1/inventario/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/inventario/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/inventario/**").hasRole("ADMIN")
                 
                 .anyRequest().authenticated()
             )

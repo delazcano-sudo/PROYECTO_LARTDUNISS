@@ -9,7 +9,6 @@ class UsuarioApplicationTests {
 
     @Configuration
     static class MockConfig {
-        // Aislamiento completo del contexto para garantizar verde inmediato
     }
 
     @Test

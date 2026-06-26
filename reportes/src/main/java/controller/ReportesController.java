@@ -6,12 +6,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,8 +33,11 @@ import jakarta.validation.Valid;
 @SuppressWarnings("null")
 public class ReportesController {
 
-    @Autowired
-    private ReportesService reportesService;
+    private final ReportesService reportesService;
+
+    public ReportesController(ReportesService reportesService) {
+        this.reportesService = reportesService;
+    }
 
     @Operation(summary = "Obtener todos los reportes", description = "Retorna el histórico completo de balances consolidados. Exclusivo de ADMINISTRADORES.")
     @GetMapping
@@ -53,7 +54,7 @@ public class ReportesController {
 
     @Operation(summary = "Crear un nuevo reporte", description = "Registra un nuevo balance financiero en el sistema")
     @PostMapping
-    public ResponseEntity<EntityModel<Reportes>> crear(@NonNull @Valid @RequestBody Reportes reporte) {
+    public ResponseEntity<EntityModel<Reportes>> crear(@Valid @RequestBody Reportes reporte) {
         Reportes nuevo = reportesService.guardarReporte(reporte);
         EntityModel<Reportes> recurso = EntityModel.of(nuevo,
                 linkTo(methodOn(ReportesController.class).obtenerUno(nuevo.getId())).withSelfRel(),
@@ -67,7 +68,7 @@ public class ReportesController {
         @ApiResponse(responseCode = "404", description = "El ID del reporte no existe")
     })
     @GetMapping("/{id}")
-    public EntityModel<Reportes> obtenerUno(@NonNull @PathVariable Long id) {
+    public EntityModel<Reportes> obtenerUno(@PathVariable Long id) {
         Reportes reporte = reportesService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Reporte no encontrado con el ID: " + id));
         
@@ -78,7 +79,7 @@ public class ReportesController {
 
     @Operation(summary = "Modificar un reporte existente", description = "Permite corregir títulos, tipos o montos calculados de un reporte")
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<Reportes>> actualizar(@NonNull @PathVariable Long id, @NonNull @Valid @RequestBody Reportes reporte) {
+    public ResponseEntity<EntityModel<Reportes>> actualizar(@PathVariable Long id, @Valid @RequestBody Reportes reporte) {
         Reportes actualizado = reportesService.actualizarReporte(id, reporte)
                 .orElseThrow(() -> new RuntimeException("No se pudo actualizar. Reporte no encontrado con el ID: " + id));
 
@@ -91,7 +92,7 @@ public class ReportesController {
 
     @Operation(summary = "Eliminar un reporte del sistema", description = "Borra físicamente un reporte de la base de datos")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@NonNull @PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (!reportesService.eliminarReporte(id)) {
             throw new RuntimeException("No se encontró el reporte a eliminar con el ID: " + id);
         }

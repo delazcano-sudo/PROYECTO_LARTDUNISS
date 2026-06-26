@@ -15,7 +15,7 @@ public class PedidoApplication {
     public static void main(String[] args) {
         SpringApplication.run(PedidoApplication.class, args);
     }
-//aca tambien añadimos el bean 
+
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

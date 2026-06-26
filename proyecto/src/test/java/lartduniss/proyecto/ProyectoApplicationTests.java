@@ -9,7 +9,7 @@ class ProyectoApplicationTests {
 
     @Configuration
     static class TestConfig {
-        // Al estar vacía, Spring no busca bases de datos ni escanea paquetes reales aquí
+        
     }
 
     @Test

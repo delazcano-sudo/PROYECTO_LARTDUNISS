@@ -26,13 +26,13 @@ public class SecurityConfig {
             .addFilterBefore(new RequestHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 // Endpoints públicos de Documentación
-                .requestMatchers("/api/despachos/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/api/v1/despachos/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 
                 // Restricciones basadas en Roles del Ecosistema
-                .requestMatchers(HttpMethod.GET, "/api/despachos/**").hasAnyRole("ADMIN", "CLIENTE", "EMPLEADO")
-                .requestMatchers(HttpMethod.POST, "/api/despachos/**").hasAnyRole("ADMIN", "EMPLEADO")
-                .requestMatchers(HttpMethod.PUT, "/api/despachos/**").hasAnyRole("ADMIN", "EMPLEADO")
-                .requestMatchers(HttpMethod.DELETE, "/api/despachos/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/v1/despachos/**").hasAnyRole("ADMIN", "CLIENTE", "EMPLEADO")
+                .requestMatchers(HttpMethod.POST, "/api/v1/despachos/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/despachos/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/despachos/**").hasRole("ADMIN")
                 
                 .anyRequest().authenticated()
             )

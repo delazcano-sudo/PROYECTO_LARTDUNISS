@@ -1,7 +1,7 @@
 package controller;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +15,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/despachos")
+@RequestMapping("/api/v1/despachos")
 @Tag(name = "Controlador de Despachos", description = "Endpoints para la gestión, actualización y eliminación de envíos")
 public class DespachoController {
 
-    @Autowired
-    private DespachoService despachoService;
+    private final DespachoService despachoService;
+
+    public DespachoController(DespachoService despachoService) {
+        this.despachoService = despachoService;
+    }
 
     @GetMapping
     @Operation(summary = "Listar todos los despachos", description = "Retorna una lista completa de todos los despachos registrados en el sistema")
@@ -35,7 +38,7 @@ public class DespachoController {
     @ApiResponse(responseCode = "201", description = "Despacho creado exitosamente")
     @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
     public ResponseEntity<Despacho> crear(@Valid @RequestBody Despacho despacho) {
-        Despacho nuevo = despachoService.guardarDespacho(despacho);
+        Despacho nuevo = Objects.requireNonNull(despachoService.guardarDespacho(despacho), "La respuesta de guardarDespacho no puede ser null");
         return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
     }
 // Añadimos el runtime exception para manejar el caso de que no se encuentre el despacho, y así devolver un mensaje más claro al cliente

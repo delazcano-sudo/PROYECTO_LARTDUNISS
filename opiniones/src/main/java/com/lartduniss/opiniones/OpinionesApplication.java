@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.lartduniss.opiniones.repository") // 
+@EntityScan(basePackages = "com.lartduniss.opiniones.model")
 @ComponentScan(basePackages = {
     "com.lartduniss.opiniones",
     "com.lartduniss.opiniones.controller",
@@ -16,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
     "com.lartduniss.opiniones.config",
     "exception"
 })
-@EntityScan(basePackages = {"model"})
-@EnableJpaRepositories(basePackages = {"repository"})
 public class OpinionesApplication {
 
     public static void main(String[] args) {

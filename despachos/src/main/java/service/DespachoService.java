@@ -3,22 +3,25 @@ package service;
 import model.Despacho;
 import repository.DespachoRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class DespachoService {
 
-    @Autowired
-    private DespachoRepository despachoRepository;
+    private final DespachoRepository despachoRepository;
+
+    public DespachoService(DespachoRepository despachoRepository) {
+        this.despachoRepository = despachoRepository;
+    }
 
     public List<Despacho> obtenerTodos() {
         return despachoRepository.findAll();
     }
 
     public Despacho guardarDespacho(Despacho despacho) {
-        return despachoRepository.save(despacho);
+        return Objects.requireNonNull(despachoRepository.save(despacho), "El despacho guardado no puede ser null");
     }
 
     public Optional<Despacho> buscarPorId(Long id) {
@@ -26,7 +29,7 @@ public class DespachoService {
     }
 
     public Optional<Despacho> actualizarDespacho(Long id, Despacho despachoActualizado) {
-        return despachoRepository.findById(id).map(despachoExistente -> {
+        return despachoRepository.findById(id).map((Despacho despachoExistente) -> {
             despachoExistente.setDireccionEntrega(despachoActualizado.getDireccionEntrega());
             despachoExistente.setEstado(despachoActualizado.getEstado());
             despachoExistente.setFechaProgramada(despachoActualizado.getFechaProgramada());
@@ -36,7 +39,7 @@ public class DespachoService {
     }
 
     public boolean eliminarDespacho(Long id) {
-        return despachoRepository.findById(id).map(despacho -> {
+        return despachoRepository.findById(id).map((Despacho despacho) -> {
             despachoRepository.delete(despacho);
             return true;
         }).orElse(false);

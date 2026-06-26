@@ -17,7 +17,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                // Acceso público para Swagger de Pedidos
+                
                 .requestMatchers("/api/v1/pedidos/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 
                 .requestMatchers(HttpMethod.GET, "/api/v1/pedidos/**").hasAnyAuthority("CLIENTE", "ADMINISTRADOR")

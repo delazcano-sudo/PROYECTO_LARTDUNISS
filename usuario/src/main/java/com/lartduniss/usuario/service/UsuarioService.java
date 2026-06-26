@@ -1,5 +1,6 @@
 package com.lartduniss.usuario.service;
 
+import org.springframework.lang.NonNull;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ public class UsuarioService {
 
         if (request.getRoles() == null || request.getRoles().isEmpty()) {
             Rol rolPorDefecto = rolRepository.findByNombreRol("CLIENTE")
-                .orElseThrow(() -> new RuntimeException("Error: El rol CLIENTE no existe en la DB."));
+                .orElseGet(() -> rolRepository.save(new Rol(null, "CLIENTE")));
             nuevoUsuario.agregarRol(rolPorDefecto);
         } else {
             for (String nombreRol : request.getRoles()) {

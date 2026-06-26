@@ -1,8 +1,8 @@
 package com.lartduniss.inventario.service;
 
+import org.springframework.lang.NonNull;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import com.lartduniss.inventario.model.Inventario;
@@ -11,8 +11,11 @@ import com.lartduniss.inventario.repository.InventarioRepository;
 @Service
 public class InventarioService {
 
-    @Autowired
-    private InventarioRepository inventarioRepository;
+    private final InventarioRepository inventarioRepository;
+
+    public InventarioService(InventarioRepository inventarioRepository) {
+        this.inventarioRepository = inventarioRepository;
+    }
 
     public List<Inventario> listarTodo() {
         return inventarioRepository.findAll();
@@ -22,7 +25,7 @@ public class InventarioService {
         return inventarioRepository.findByProductoId(productoId);
     }
 
-    public Inventario guardar(Inventario nuevoInventario) {
+    public Inventario guardar(@NonNull Inventario nuevoInventario) {
         return inventarioRepository.save(nuevoInventario);
     }
 

@@ -22,10 +22,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/usuario/registrar", "/usuario/login").permitAll()
-                .requestMatchers("/auth/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/error").permitAll()
+                .requestMatchers("/api/v1/usuarios/**").permitAll()
+                .requestMatchers("/api/v1/usuarios/v3/api-docs/**", "/api/v1/usuarios/v3/api-docs", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
-            ).build();
+            )
+            .build();
     }
 
     @Bean

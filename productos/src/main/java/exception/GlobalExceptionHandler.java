@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 1. Captura los errores de producto no encontrado (Lanzados en el Controller por .orElseThrow())
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> manejarRuntimeException(RuntimeException ex) {
         ErrorResponse error = new ErrorResponse(
@@ -23,7 +22,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    // 2. Captura los errores de validación de Jakarta (@NotBlank, @Min, @NotNull en tu entidad Producto)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> manejarErroresValidacion(MethodArgumentNotValidException ex) {
         String detalles = ex.getBindingResult().getFieldErrors().stream()
@@ -38,7 +36,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    // 3. Captura cualquier otro fallo inesperado del servidor
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> manejarErroresGlobales(Exception ex) {
         ErrorResponse error = new ErrorResponse(

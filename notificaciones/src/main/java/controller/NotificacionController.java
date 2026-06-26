@@ -1,7 +1,7 @@
 package controller;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +17,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
-@RequestMapping("/api/notificaciones")
+@RequestMapping("/api/v1/notificaciones")
 @Tag(name = "Controlador de Notificaciones", description = "Endpoints para el envío, registro y auditoría de alertas del sistema")
 public class NotificacionController {
 
-    @Autowired
-    private NotificacionService notificacionService;
+    private final NotificacionService notificacionService;
+
+    public NotificacionController(NotificacionService notificacionService) {
+        this.notificacionService = notificacionService;
+    }
 
     @GetMapping
     @Operation(summary = "Listar todas las notificaciones", description = "Retorna una lista completa de todo el historial de alertas emitidas")
@@ -37,7 +40,7 @@ public class NotificacionController {
     @ApiResponse(responseCode = "201", description = "Notificación creada con éxito")
     @ApiResponse(responseCode = "400", description = "Cuerpo de la petición inválido o incompleto")
     public ResponseEntity<Notificacion> crear(@Valid @RequestBody Notificacion notificacion) {
-        Notificacion nueva = notificacionService.guardarNotificacion(notificacion);
+        Notificacion nueva = Objects.requireNonNull(notificacionService.guardarNotificacion(notificacion), "La respuesta de guardarNotificacion no puede ser null");
         return new ResponseEntity<>(nueva, HttpStatus.CREATED);
     }
 

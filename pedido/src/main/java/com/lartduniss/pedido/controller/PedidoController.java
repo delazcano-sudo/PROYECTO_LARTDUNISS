@@ -5,7 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -27,8 +26,11 @@ import jakarta.validation.Valid;
 @SuppressWarnings("null")
 public class PedidoController {
 
-    @Autowired
-    private PedidoService pedidoService;
+    private final PedidoService pedidoService;
+
+    public PedidoController(PedidoService pedidoService) {
+        this.pedidoService = pedidoService;
+    }
 
     @Operation(summary = "Obtener todos los pedidos", description = "Retorna una colección de pedidos con sus respectivos enlaces hipermedia")
     @GetMapping
@@ -44,7 +46,7 @@ public class PedidoController {
 
     @Operation(summary = "Crear un nuevo pedido", description = "Registra el pedido e inicializa su estado como PENDIENTE_PAGO de forma automática")
     @PostMapping
-    public ResponseEntity<EntityModel<Pedido>> crear(@NonNull @Valid @RequestBody Pedido pedido) {
+    public ResponseEntity<EntityModel<Pedido>> crear(@Valid @RequestBody Pedido pedido) {
         Pedido nuevoPedido = pedidoService.crear(pedido);
         EntityModel<Pedido> recurso = EntityModel.of(nuevoPedido,
                 linkTo(methodOn(PedidoController.class).obtenerPorId(nuevoPedido.getId())).withSelfRel(),
@@ -58,7 +60,7 @@ public class PedidoController {
         @ApiResponse(responseCode = "404", description = "El pedido no existe")
     })
     @GetMapping("/{id}")
-    public EntityModel<Pedido> obtenerPorId(@NonNull @PathVariable Long id) {
+    public EntityModel<Pedido> obtenerPorId(@PathVariable @NonNull Long id) {
         Pedido pedido = pedidoService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Pedido no encontrado"));
         return EntityModel.of(pedido,
@@ -73,7 +75,7 @@ public class PedidoController {
         @ApiResponse(responseCode = "404", description = "El pedido a actualizar no existe")
     })
     @PutMapping("/{id}/estado")
-    public ResponseEntity<EntityModel<Pedido>> actualizarEstado(@NonNull @PathVariable Long id, @RequestBody String nuevoEstado) {
+    public ResponseEntity<EntityModel<Pedido>> actualizarEstado(@PathVariable Long id, @RequestBody String nuevoEstado) {
         Pedido actualizado = pedidoService.actualizarEstado(id, nuevoEstado);
         EntityModel<Pedido> recurso = EntityModel.of(actualizado,
                 linkTo(methodOn(PedidoController.class).obtenerPorId(id)).withSelfRel(),

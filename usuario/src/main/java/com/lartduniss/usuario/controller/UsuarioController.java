@@ -1,6 +1,5 @@
 package com.lartduniss.usuario.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,17 +12,24 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/api/v1/usuarios")
 @Tag(name = "Authentication", description = "Endpoints para registro e inicio de sesión de usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @Operation(summary = "Registrar un nuevo usuario", description = "Guarda el usuario asignándole por defecto el rol de CLIENTE si no se especifican roles.")
     @PostMapping("/registrar")
     public ResponseEntity<String> registrar(@RequestBody UsuarioRequest request) {
-        return ResponseEntity.ok(usuarioService.registrar(request));
+        try {
+            return ResponseEntity.ok(usuarioService.registrar(request));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @Operation(summary = "Iniciar sesión", description = "Retorna el Token JWT correspondiente si las credenciales coinciden")

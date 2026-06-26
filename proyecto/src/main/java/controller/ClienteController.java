@@ -6,7 +6,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -28,8 +27,11 @@ import jakarta.validation.Valid;
 @SuppressWarnings("null")
 public class ClienteController {
 
-    @Autowired
-    private ClienteService clienteService;
+    private final ClienteService clienteService;
+
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
 
     @Operation(summary = "Listar todos los clientes", description = "Retorna el listado de clientes registrados con soporte hipermedia HATEOAS")
     @GetMapping
@@ -46,7 +48,7 @@ public class ClienteController {
 
     @Operation(summary = "Registrar un nuevo cliente", description = "Crea un registro de cliente validando que el email sea único y posea formato correcto")
     @PostMapping
-    public ResponseEntity<EntityModel<Cliente>> crear(@NonNull @Valid @RequestBody Cliente cliente) {
+    public ResponseEntity<EntityModel<Cliente>> crear(@Valid @RequestBody Cliente cliente) {
         Cliente nuevo = clienteService.guardarCliente(cliente);
         EntityModel<Cliente> recurso = EntityModel.of(nuevo,
                 linkTo(methodOn(ClienteController.class).obtenerUno(nuevo.getId())).withSelfRel(),
@@ -60,7 +62,7 @@ public class ClienteController {
         @ApiResponse(responseCode = "404", description = "El ID del cliente no existe en los registros")
     })
     @GetMapping("/{id}")
-    public EntityModel<Cliente> obtenerUno(@NonNull @PathVariable Long id) {
+    public EntityModel<Cliente> obtenerUno(@PathVariable @NonNull Long id) {
         Cliente cliente = clienteService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
         
@@ -72,7 +74,7 @@ public class ClienteController {
 
     @Operation(summary = "Actualizar datos de un cliente", description = "Permite modificar el nombre, email o teléfono de un cliente existente")
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<Cliente>> actualizar(@NonNull @PathVariable Long id, @NonNull @Valid @RequestBody Cliente clienteDatos) {
+    public ResponseEntity<EntityModel<Cliente>> actualizar(@PathVariable Long id, @Valid @RequestBody Cliente clienteDatos) {
         Cliente clienteActualizado = clienteService.buscarPorId(id)
                 .map(clienteExistente -> {
                     clienteExistente.setNombre(clienteDatos.getNombre());

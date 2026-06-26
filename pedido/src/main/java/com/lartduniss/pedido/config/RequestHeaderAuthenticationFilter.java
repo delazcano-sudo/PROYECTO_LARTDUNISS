@@ -4,6 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,15 +17,24 @@ import java.util.stream.Collectors;
 public class RequestHeaderAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         
         String username = request.getHeader("X-User-Username");
+        if (username == null) {
+            username = request.getHeader("X-Username");
+        }
         String rolesStr = request.getHeader("X-User-Roles");
 
         if (username != null && rolesStr != null && !rolesStr.trim().isEmpty()) {
             List<SimpleGrantedAuthority> authorities = Arrays.stream(rolesStr.split(","))
-                    .map(rol -> new SimpleGrantedAuthority(rol.trim().toUpperCase()))
+                    .flatMap(rol -> {
+                        String normalized = rol.trim().toUpperCase();
+                        return java.util.stream.Stream.of(
+                                new SimpleGrantedAuthority(normalized),
+                                new SimpleGrantedAuthority("ROLE_" + normalized)
+                        );
+                    })
                     .collect(Collectors.toList());
 
             UsernamePasswordAuthenticationToken authentication =

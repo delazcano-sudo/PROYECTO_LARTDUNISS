@@ -25,13 +25,19 @@ public class SecurityConfig {
             .addFilterBefore(new RequestHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(auth -> auth
                 // Endpoints de Swagger expuestos de forma segura
-                .requestMatchers("/api/notificaciones/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                .requestMatchers(
+                    "/api/v1/notificaciones/v3/api-docs",
+                    "/api/v1/notificaciones/v3/api-docs/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/webjars/**"
+                ).permitAll()
                 
-                // Restricciones operacionales por Rol
-                .requestMatchers(HttpMethod.GET, "/api/notificaciones/**").hasAnyRole("ADMIN", "EMPLEADO", "CLIENTE")
-                .requestMatchers(HttpMethod.POST, "/api/notificaciones/**").hasAnyRole("ADMIN", "EMPLEADO")
-                .requestMatchers(HttpMethod.PUT, "/api/notificaciones/**").hasAnyRole("ADMIN", "EMPLEADO")
-                .requestMatchers(HttpMethod.DELETE, "/api/notificaciones/**").hasRole("ADMIN")
+                
+                .requestMatchers(HttpMethod.GET, "/api/v1/notificaciones/**").hasAnyRole("ADMIN", "EMPLEADO", "CLIENTE")
+                .requestMatchers(HttpMethod.POST, "/api/v1/notificaciones/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.PUT, "/api/v1/notificaciones/**").hasAnyRole("ADMIN", "EMPLEADO")
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/notificaciones/**").hasRole("ADMIN")
                 
                 .anyRequest().authenticated()
             )

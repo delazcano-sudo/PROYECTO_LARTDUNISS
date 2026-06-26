@@ -14,7 +14,6 @@ public class JwtService
     private String secreto;
     public String generarToken(String username, List<String> roles)
     {
-        //Calculo: 1000ms * 60s *60m *2h=7.200 milisegundos
         long dosHorasEnMilisegundos = 1000L * 60 * 60 * 2;
         return Jwts.builder()
             .setSubject(username)

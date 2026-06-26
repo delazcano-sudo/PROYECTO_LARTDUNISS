@@ -64,6 +64,56 @@
             "projectName": "api-gateway",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DespachosApplication<despachos>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "lartduniss.proyecto.despachos.DespachosApplication",
+            "projectName": "despachos",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-InventarioApplication<inventario>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.lartduniss.inventario.InventarioApplication",
+            "projectName": "inventario",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-NotificacionesApplication<notificaciones>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "proyecto.lartduniss.notificaciones.NotificacionesApplication",
+            "projectName": "notificaciones",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-OpinionesApplication<opiniones>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.lartduniss.opiniones.OpinionesApplication",
+            "projectName": "opiniones",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ReportesApplication<reportes>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "lartduniss.proyecto.reportes.ReportesApplication",
+            "projectName": "reportes",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

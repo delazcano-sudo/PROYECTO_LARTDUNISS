@@ -3,16 +3,19 @@ package service;
 import model.Notificacion;
 import repository.NotificacionRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class NotificacionService {
 
-    @Autowired
-    private NotificacionRepository notificacionRepository;
+    private final NotificacionRepository notificacionRepository;
+
+    public NotificacionService(NotificacionRepository notificacionRepository) {
+        this.notificacionRepository = notificacionRepository;
+    }
 
     public List<Notificacion> obtenerTodas() {
         return notificacionRepository.findAll();
@@ -22,7 +25,7 @@ public class NotificacionService {
         if (notificacion.getFechaEnvio() == null) {
             notificacion.setFechaEnvio(LocalDateTime.now());
         }
-        return notificacionRepository.save(notificacion);
+        return Objects.requireNonNull(notificacionRepository.save(notificacion), "La notificación guardada no puede ser null");
     }
 
     public Optional<Notificacion> buscarPorId(Long id) {
@@ -30,7 +33,7 @@ public class NotificacionService {
     }
 
     public Optional<Notificacion> actualizarNotificacion(Long id, Notificacion notificacionActualizada) {
-        return notificacionRepository.findById(id).map(notificacionExistente -> {
+        return notificacionRepository.findById(id).map((Notificacion notificacionExistente) -> {
             notificacionExistente.setDestinatario(notificacionActualizada.getDestinatario());
             notificacionExistente.setTipo(notificacionActualizada.getTipo());
             notificacionExistente.setMensaje(notificacionActualizada.getMensaje());
@@ -40,7 +43,7 @@ public class NotificacionService {
     }
 
     public boolean eliminarNotificacion(Long id) {
-        return notificacionRepository.findById(id).map(notificacion -> {
+        return notificacionRepository.findById(id).map((Notificacion notificacion) -> {
             notificacionRepository.delete(notificacion);
             return true;
         }).orElse(false);

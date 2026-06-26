@@ -9,7 +9,7 @@ class ReportesApplicationTests {
 
     @Configuration
     static class MockConfig {
-        // Configuración limpia y aislada para asegurar el verde directo
+        
     }
 
     @Test

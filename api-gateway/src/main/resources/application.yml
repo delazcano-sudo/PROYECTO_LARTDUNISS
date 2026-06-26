@@ -1,16 +1,18 @@
 server:
   port: 9090
 
+jwt:
+  secret: "493322258340235739058340598340598340598340598340598"
+
 spring:
   application:
     name: api-gateway
   cloud:
     gateway:
-      # Agregamos el cors que se nos olvido 
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:9090"
+            allowedOrigins: "*" 
             allowedMethods:
               - GET
               - POST
@@ -21,112 +23,138 @@ spring:
       
       routes:
         # 1. Clientes
-        - id: clientes-service
-          uri: http://localhost:8091
-          predicates:
-            - Path=/api/v1/clientes/**
         - id: clientes-docs
           uri: http://localhost:8091
           predicates:
             - Path=/api/v1/clientes/v3/api-docs
+        - id: clientes-service
+          uri: http://localhost:8091
+          predicates:
+            - Path=/api/v1/clientes/**
+          filters:
+            - AuthenticationFilter
 
         # 2. Productos
-        - id: productos-service
-          uri: http://localhost:8092
-          predicates:
-            - Path=/api/v1/productos/**
         - id: productos-docs
           uri: http://localhost:8092
           predicates:
             - Path=/api/v1/productos/v3/api-docs
+        - id: productos-service
+          uri: http://localhost:8092
+          predicates:
+            - Path=/api/v1/productos/**
+          filters:
+            - AuthenticationFilter
 
         # 3. Pagos
-        - id: pagos-service
-          uri: http://localhost:8093
-          predicates:
-            - Path=/api/v1/pagos/**
         - id: pagos-docs
           uri: http://localhost:8093
           predicates:
             - Path=/api/v1/pagos/v3/api-docs
+        - id: pagos-service
+          uri: http://localhost:8093
+          predicates:
+            - Path=/api/v1/pagos/**
+          filters:
+            - AuthenticationFilter
 
         # 4. Pedidos
-        - id: pedidos-service
-          uri: http://localhost:8094
-          predicates:
-            - Path=/api/v1/pedidos/**
         - id: pedidos-docs
           uri: http://localhost:8094
           predicates:
             - Path=/api/v1/pedidos/v3/api-docs
+        - id: pedidos-service
+          uri: http://localhost:8094
+          predicates:
+            - Path=/api/v1/pedidos/**
+          filters:
+            - AuthenticationFilter
 
         # 5. Usuarios
-        - id: usuarios-service
-          uri: http://localhost:8095
-          predicates:
-            - Path=/api/v1/usuarios/**
         - id: usuarios-docs
           uri: http://localhost:8095
           predicates:
             - Path=/api/v1/usuarios/v3/api-docs
+        - id: usuarios-registro
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/v1/usuarios/registrar
+        - id: usuarios-login
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/v1/usuarios/login
+        - id: usuarios-service
+          uri: http://localhost:8095
+          predicates:
+            - Path=/api/v1/usuarios/**
+          filters:
+            - AuthenticationFilter
 
         # 6. Despachos
-        - id: servicio-despachos
-          uri: http://localhost:8097
-          predicates:
-            - Path=/api/v1/despachos/**
         - id: despachos-docs
           uri: http://localhost:8097
           predicates:
             - Path=/api/v1/despachos/v3/api-docs
+        - id: servicio-despachos
+          uri: http://localhost:8097
+          predicates:
+            - Path=/api/v1/despachos/**
+          filters:
+            - AuthenticationFilter
 
         # 7. Inventario
-        - id: servicio-inventario
-          uri: http://localhost:8099
-          predicates:
-            - Path=/api/v1/inventario/**
         - id: inventario-docs
           uri: http://localhost:8099
           predicates:
             - Path=/api/v1/inventario/v3/api-docs
+        - id: servicio-inventario
+          uri: http://localhost:8099
+          predicates:
+            - Path=/api/v1/inventario/**
+          filters:
+            - AuthenticationFilter
 
         # 8. Notificaciones
-        - id: servicio-notificaciones
-          uri: http://localhost:8071
-          predicates:
-            - Path=/api/v1/notificaciones/**
         - id: notificaciones-docs
           uri: http://localhost:8071
           predicates:
             - Path=/api/v1/notificaciones/v3/api-docs
+        - id: servicio-notificaciones
+          uri: http://localhost:8071
+          predicates:
+            - Path=/api/v1/notificaciones/**
+          filters:
+            - AuthenticationFilter
 
         # 9. Reportes
-        - id: servicio-reportes
-          uri: http://localhost:8096
-          predicates:
-            - Path=/api/v1/reportes/**
         - id: reportes-docs
           uri: http://localhost:8096
           predicates:
             - Path=/api/v1/reportes/v3/api-docs
+        - id: servicio-reportes
+          uri: http://localhost:8096
+          predicates:
+            - Path=/api/v1/reportes/**
+          filters:
+            - AuthenticationFilter
 
         # 10. Opiniones
-        - id: servicio-opiniones
-          uri: http://localhost:8098
-          predicates:
-            - Path=/api/v1/opiniones/**
         - id: opiniones-docs
           uri: http://localhost:8098
           predicates:
             - Path=/api/v1/opiniones/v3/api-docs
+        - id: servicio-opiniones
+          uri: http://localhost:8098
+          predicates:
+            - Path=/api/v1/opiniones/**
+          filters:
+            - AuthenticationFilter
 
-# Desactivar Eureka tal como lo muestra el ejemplo
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
 
-# Agregando las interfaces de Swagger
 springdoc:
   swagger-ui:
     urls:

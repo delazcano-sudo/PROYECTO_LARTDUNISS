@@ -5,7 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -27,8 +26,11 @@ import jakarta.validation.Valid;
 @SuppressWarnings("null")
 public class ProductoController {
 
-    @Autowired
-    private ProductoService productoService;
+    private final ProductoService productoService;
+
+    public ProductoController(ProductoService productoService) {
+        this.productoService = productoService;
+    }
 
     @Operation(summary = "Obtener todos los productos", description = "Retorna el catálogo completo con enlaces hipermedia HATEOAS")
     @GetMapping
@@ -59,7 +61,7 @@ public class ProductoController {
         @ApiResponse(responseCode = "404", description = "El ID del producto solicitado no existe")
     })
     @GetMapping("/{id}")
-    public EntityModel<Producto> obtenerUno(@NonNull @PathVariable Long id) {
+    public EntityModel<Producto> obtenerUno(@PathVariable @NonNull Long id) {
         Producto producto = productoService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Producto no encontrado con el ID: " + id));
         
@@ -75,7 +77,7 @@ public class ProductoController {
         @ApiResponse(responseCode = "404", description = "El producto a actualizar no existe")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<Producto>> actualizar(@NonNull @PathVariable Long id, @NonNull @Valid @RequestBody Producto productoDatos) {
+    public ResponseEntity<EntityModel<Producto>> actualizar(@PathVariable Long id, @Valid @RequestBody Producto productoDatos) {
         Producto productoActualizado = productoService.buscarPorId(id)
                 .map(productoExistente -> {
                     productoExistente.setNombre(productoDatos.getNombre());

@@ -7,7 +7,7 @@ class ProductosApplicationTests {
 
     @Test
     void contextLoads() {
-        // Test plano para asegurar la compilación correcta del módulo
+        
         assertTrue(true);
     }
 }
