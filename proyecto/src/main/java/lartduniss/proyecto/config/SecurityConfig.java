@@ -18,10 +18,10 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/clientes/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**", "/error").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/clientes/**").permitAll() // Registro libre
                 .requestMatchers(HttpMethod.GET, "/api/v1/clientes/**").hasAnyRole("CLIENTE", "ADMINISTRADOR", "ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/clientes/**").hasAnyRole("CLIENTE", "ADMINISTRADOR", "ADMIN")
-                .requestMatchers("/api/v1/clientes/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception

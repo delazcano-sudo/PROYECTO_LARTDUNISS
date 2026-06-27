@@ -26,13 +26,13 @@ class ProductoServiceTest {
     void guardarProductoExitosoTest() {
         // 1. Arrange
         Producto productoInput = new Producto();
-        productoInput.setNombre("Perfume de Rosas");
+        productoInput.setNombre("Pastel de Chocolate");
         productoInput.setPrecio(25000.0);
         productoInput.setStock(10);
 
         Producto productoGuardado = new Producto();
         productoGuardado.setId(1L);
-        productoGuardado.setNombre("Perfume de Rosas");
+        productoGuardado.setNombre("Pastel de Chocolate");
         productoGuardado.setPrecio(25000.0);
         productoGuardado.setStock(10);
 
@@ -44,7 +44,7 @@ class ProductoServiceTest {
         // 3. Assert (Patrón AAA)
         assertNotNull(resultado);
         assertEquals(1L, resultado.getId());
-        assertEquals("Perfume de Rosas", resultado.getNombre());
+        assertEquals("Pastel de Chocolate", resultado.getNombre());
         Mockito.verify(productoRepository, Mockito.times(1)).save(productoInput);
     }
 }
